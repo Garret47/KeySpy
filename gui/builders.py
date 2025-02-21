@@ -1,7 +1,7 @@
-import ttkbootstrap
 from abc import ABC, abstractmethod
 
 from .styles import WidgetStyle
+from utils import AsyncTkinter
 
 
 class InterfaceBuilder(ABC):
@@ -71,7 +71,7 @@ class BuilderContainer(Builder):
             child.extra.update(master=self.widget)
 
     def run(self):
-        self.widget.mainloop()
+        AsyncTkinter.async_mainloop(self.widget)
 
 
 class BuilderComponent(Builder):

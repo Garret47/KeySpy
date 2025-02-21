@@ -4,6 +4,7 @@ import logging
 from settings import env_config, app_config
 from server import Server
 from gui import UIManager
+from utils import AsyncTkinter
 
 app_config.configure_logging()
 logger = logging.getLogger(app_config.LOGGER_NAME)
@@ -12,11 +13,11 @@ logger = logging.getLogger(app_config.LOGGER_NAME)
 ### TODO между TkinterGUI и Register, перенести отдельные классы, убрать logging.json и заменить на yaml, добавить логгирование!!!
 
 
-async def main():
+def main():
     server = Server(env_config.HOST, env_config.PORT)
-    asyncio.create_task(server.start())
+    AsyncTkinter.get_event_loop().create_task(server.start())
     UIManager.render_main_window()
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    main()

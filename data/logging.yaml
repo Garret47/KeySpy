@@ -19,7 +19,7 @@ handlers:
     level: INFO
 
 loggers:
-  console:
+  root:
     handlers: [console]
     level: DEBUG
     propagate: true

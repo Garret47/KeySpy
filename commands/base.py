@@ -1,9 +1,7 @@
 import abc
 import logging
 
-from settings import app_config
-
-logger = logging.getLogger(app_config.LOGGER_NAME)
+logger = logging.getLogger(__name__)
 
 
 class CommandError(Exception):

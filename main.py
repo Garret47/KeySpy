@@ -6,7 +6,7 @@ from server import Server
 from gui import UIManager
 
 app_config.configure_logging()
-logger = logging.getLogger(app_config.LOGGER_NAME)
+logger = logging.getLogger(__name__)
 
 ### TODO Изменить Director, убрать TkinterGUI, реализовать чтение через отдельный класс, убрать жесткую зависимость
 ### TODO между TkinterGUI и Register, перенести отдельные классы, убрать logging.json и заменить на yaml, добавить логгирование!!!

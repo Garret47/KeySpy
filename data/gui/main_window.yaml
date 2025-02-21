@@ -1,0 +1,11 @@
+type: Window
+extra:
+    size: [ 800, 600 ]
+    minsize: [ 800, 600 ]
+    themename: darkly
+grid_config:
+        rows: 3
+        columns: 6
+        r_weights: [1, 4, 1]
+        c_weights: [1, 1, 1, 1, 1, 1]
+children: [ !include frame_header.yaml ]

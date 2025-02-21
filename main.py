@@ -3,20 +3,19 @@ import logging
 
 from settings import env_config, app_config
 from server import Server
-from commands import ScreenshotCommand
+from gui import UIManager
 
 app_config.configure_logging()
 logger = logging.getLogger(app_config.LOGGER_NAME)
+
+### TODO Изменить Director, убрать TkinterGUI, реализовать чтение через отдельный класс, убрать жесткую зависимость
+### TODO между TkinterGUI и Register, перенести отдельные классы, убрать logging.json и заменить на yaml, добавить логгирование!!!
 
 
 async def main():
     server = Server(env_config.HOST, env_config.PORT)
     asyncio.create_task(server.start())
-    while True:
-        if server.clients:
-            client = next(iter(server.clients.keys()))
-            await server.request(client, ScreenshotCommand)
-        await asyncio.sleep(1)
+    UIManager.render_main_window()
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 import logging.config
 import json
@@ -9,9 +9,15 @@ class AppConfigError(Exception):
 
 
 @dataclass
+class GUIConfig:
+    FILENAME_MAIN_CONFIG = 'data/gui/main_window.yaml'
+
+
+@dataclass
 class AppConfig:
     FILE_LOGGING_CONFIG: str = 'data/logging.json'
     LOGGER_NAME: str = 'console'
+    gui: GUIConfig = field(default_factory=GUIConfig)
 
     def configure_logging(self):
         logging_file = Path(self.FILE_LOGGING_CONFIG)

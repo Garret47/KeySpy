@@ -1,0 +1,30 @@
+disable_existing_loggers: false
+version: 1
+
+formatters:
+  verbose:
+    format: '{asctime} {name} {levelname} {message}'
+    style: '{'
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: verbose
+    level: DEBUG
+
+  file:
+    class: logging.FileHandler
+    filename: app.log
+    formatter: verbose
+    level: INFO
+
+loggers:
+  console:
+    handlers: [console]
+    level: DEBUG
+    propagate: true
+
+  file:
+    handlers: [file]
+    level: INFO
+    propagate: true

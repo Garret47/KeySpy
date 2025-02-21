@@ -3,9 +3,8 @@ import logging
 
 from utils import MetaSingleton
 from commands import Command
-from settings import app_config
 
-logger = logging.getLogger(app_config.LOGGER_NAME)
+logger = logging.getLogger(__name__)
 
 
 class Server(metaclass=MetaSingleton):

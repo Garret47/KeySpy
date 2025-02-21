@@ -1,7 +1,11 @@
+import logging
 from abc import ABC, abstractmethod
 
 from .styles import WidgetStyle
 from utils import AsyncTkinter
+
+
+logger = logging.getLogger(__name__)
 
 
 class InterfaceBuilder(ABC):
@@ -34,6 +38,7 @@ class Builder(InterfaceBuilder, ABC):
         self.reset(style)
 
     def reset(self, style: WidgetStyle):
+        logger.info(f'{self.__class__.__name__} reset {style}')
         self.style = style
         self._root = self.style.tk_class(**self.style.extra)
         self.configure()

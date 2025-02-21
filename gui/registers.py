@@ -1,7 +1,11 @@
+import logging
 from typing import Type
 
 from .styles import WidgetStyle
 from .builders import InterfaceBuilder
+
+
+logger = logging.getLogger(__name__)
 
 
 class Register:
@@ -9,6 +13,7 @@ class Register:
 
     @classmethod
     def registry(cls, style_cls: Type[WidgetStyle], builder_cls: Type[InterfaceBuilder]):
+        logger.debug(f'Registry {style_cls.__name__} - {builder_cls.__name__}')
         cls._registry[style_cls] = builder_cls
 
     @classmethod
@@ -17,12 +22,3 @@ class Register:
         if type_ not in cls._registry:
             raise ValueError(f'No builder registered for style: {type_}')
         return cls._registry[type_]
-
-
-class Director:
-    @staticmethod
-    def render(register: Type[Register], style: WidgetStyle):
-        builder = register.get_builder(style)(style)
-        for child in getattr(style, 'children', []):
-            Director.render(register, child)
-        builder.run()

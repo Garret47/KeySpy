@@ -1,0 +1,87 @@
+-   type: Button
+    extra:
+        bootstyle: primary.Link.TButton
+        text: "Main"
+        takefocus: False
+    grid:
+        extra:
+            row: 0
+            column: 0
+            columnspan: 1
+            sticky: ew
+
+-   type: Button
+    extra:
+        bootstyle: primary.Link.TButton
+        text: "Create"
+        takefocus: False
+    grid:
+        extra:
+            row: 0
+            column: 1
+            columnspan: 1
+            sticky: ew
+
+-   type: Button
+    extra:
+        bootstyle: primary.Link.TButton
+        text: "Info"
+        takefocus: False
+    grid:
+        extra:
+            row: 0
+            column: 2
+            columnspan: 1
+            sticky: ew
+
+-   type: Button
+    extra:
+        bootstyle: primary.Link.TButton
+        text: "Screenshot"
+        takefocus: False
+        state: disabled
+    grid:
+        extra:
+            row: 0
+            column: 3
+            columnspan: 1
+            sticky: ew
+
+-   type: Button
+    extra:
+        bootstyle: primary.Link.TButton
+        text: "Web Camera"
+        takefocus: False
+        state: disabled
+    grid:
+        extra:
+            row: 0
+            column: 4
+            columnspan: 1
+            sticky: ew
+
+-   type: Button
+    extra:
+        bootstyle: primary.Link.TButton
+        text: "Destruct"
+        takefocus: False
+        state: disabled
+    grid:
+        extra:
+            row: 0
+            column: 5
+            columnspan: 1
+            sticky: ew
+
+-   type: Button
+    extra:
+        bootstyle: primary.Link.TButton
+        text: "File Manager"
+        takefocus: False
+        state: disabled
+    grid:
+        extra:
+            row: 0
+            column: 6
+            columnspan: 1
+            sticky: ew

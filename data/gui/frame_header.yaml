@@ -6,4 +6,11 @@ grid:
         row: 0
         column: 0
         rowspan: 1
-        columnspan: 6
+        columnspan: 7
+        sticky: NEW
+grid_config:
+        rows: 0
+        columns: 7
+        r_weights: []
+        c_weights: [1, 1, 1, 1, 1, 1, 1]
+children: !include buttons_header.yaml

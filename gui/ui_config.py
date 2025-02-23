@@ -10,7 +10,7 @@ class Extra(BaseModel):
     extra: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
 
-class GridConfig(BaseModel):
+class GridConfigSchema(BaseModel):
     rows: int
     columns: int
     r_weights: List[int]
@@ -25,11 +25,7 @@ class GridConfig(BaseModel):
         return self
 
 
-class GridStyle(Extra):
-    pass
-
-
-class WidgetStyle(Extra):
+class WidgetSchema(Extra):
     type: str
 
     tk_class: Type[tk.Widget] = Field(exclude=True, default=None)
@@ -42,17 +38,17 @@ class WidgetStyle(Extra):
         return self
 
 
-class ComponentStyle(WidgetStyle):
+class ComponentSchema(WidgetSchema):
     type: Literal['Button']
-    grid: Optional[GridStyle] = None
+    grid: Optional[Extra] = None
 
 
-class ContainerStyle(WidgetStyle):
+class ContainerSchema(WidgetSchema):
     type: Literal['Window']
-    grid_config: Optional[GridConfig] = None
+    grid_config: Optional[GridConfigSchema] = None
     children: Optional[List[
         Annotated[
-            Union["ContainerComponentStyle", "ComponentStyle"], Field(discriminator='type')
+            Union["ContainerComponentSchema", "ComponentSchema"], Field(discriminator='type')
         ]
     ]] = Field(default_factory=list)
 
@@ -66,9 +62,9 @@ class ContainerStyle(WidgetStyle):
         return extra
 
 
-class ContainerComponentStyle(ContainerStyle, ComponentStyle):
+class ContainerComponentSchema(ContainerSchema, ComponentSchema):
     type: Literal['Frame']
-    children: Optional[List[ComponentStyle]] = Field(default_factory=list)
+    children: Optional[List[ComponentSchema]] = Field(default_factory=list)
 
     @field_validator('extra', mode='before')
     @classmethod
@@ -78,10 +74,50 @@ class ContainerComponentStyle(ContainerStyle, ComponentStyle):
         return extra
 
 
+class StyleSchema(BaseModel):
+    name: str
+    master: Optional[str] = None
+    config: Optional[Dict[str, Any]] = None
+    map: Optional[Dict[str, Any]] = None
+
+    tk_class: Type[ttk.Style] = Field(exclude=True, default=None)
+
+    @model_validator(mode='after')
+    @classmethod
+    def validate_config_map(cls, values):
+        if getattr(values, 'config'):
+            values.config['style'] = values.name
+        if getattr(values, 'map'):
+            values.map['style'] = values.name
+
+        return values
+
+    @model_validator(mode='after')
+    def set_tk_class(self):
+        self.tk_class = ttk.Style
+        return self
+
+
 class Model(BaseModel):
-    model: Union[ContainerStyle, ContainerComponentStyle, ComponentStyle] = Field(discriminator='type')
+    model: Union[ContainerSchema, ContainerComponentSchema, ComponentSchema] = Field(discriminator='type')
 
     def __new__(cls, **kwargs):
         self = super().__new__(cls)
         super(Model, self).__init__(**kwargs)
+        return self.model
+
+
+class ModelStyle(BaseModel):
+    model: List[StyleSchema] = None
+
+    @field_validator('model', mode='before')
+    @classmethod
+    def set_empty_list(cls, values):
+        if values is None:
+            values = []
+        return values
+
+    def __new__(cls, **kwargs):
+        self = super().__new__(cls)
+        super(ModelStyle, self).__init__(**kwargs)
         return self.model

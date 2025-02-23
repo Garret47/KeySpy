@@ -1,0 +1,13 @@
+- name: .
+  master: darkly
+  config:
+      font: [DejaVu Sans Mono, 10]
+
+- name: Custom.Link.TButton
+  config:
+      foreground: "#bb86fc"
+      borderwidth: 0
+      relief: flat
+  map:
+      foreground: [["pressed", "#ff5555"], ["active", "#d9a2ff"], ["disabled", "#3A3A3A"]]
+      shiftrelief: [["pressed !disabled", 0]]

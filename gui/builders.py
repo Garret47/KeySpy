@@ -1,7 +1,8 @@
 import logging
 from abc import ABC, abstractmethod
+from typing import Union
 
-from .styles import WidgetStyle
+from .ui_config import WidgetSchema, StyleSchema
 from utils import AsyncTkinter
 
 
@@ -10,11 +11,11 @@ logger = logging.getLogger(__name__)
 
 class InterfaceBuilder(ABC):
     @abstractmethod
-    def __init__(self, style: WidgetStyle):
+    def __init__(self, style: Union[WidgetSchema, StyleSchema]):
         pass
 
     @abstractmethod
-    def reset(self, style: WidgetStyle):
+    def reset(self, style: Union[WidgetSchema, StyleSchema]):
         pass
 
     @property
@@ -32,15 +33,15 @@ class InterfaceBuilder(ABC):
 
 
 class Builder(InterfaceBuilder, ABC):
-    def __init__(self, style: WidgetStyle):
-        self.style = None
+    def __init__(self, schema: Union[WidgetSchema, StyleSchema]):
+        self.schema = None
         self._root = None
-        self.reset(style)
+        self.reset(schema)
 
-    def reset(self, style: WidgetStyle):
-        logger.info(f'{self.__class__.__name__} reset {style}')
-        self.style = style
-        self._root = self.style.tk_class(**self.style.extra)
+    def reset(self, schema: Union[WidgetSchema, StyleSchema]):
+        logger.info(f'{self.__class__.__name__} reset {schema}')
+        self.schema = schema
+        self._root = self.schema.tk_class(**self.schema.extra)
         self.configure()
 
     def configure(self):
@@ -60,20 +61,21 @@ class BuilderContainer(Builder):
         return self
 
     def configure_grid(self):
-        if self.style.grid_config is None:
+        if self.schema.grid_config is None:
             return
 
-        for i in range(self.style.grid_config.rows):
-            self.widget.rowconfigure(i, weight=self.style.grid_config.r_weights[i])
+        for i in range(self.schema.grid_config.rows):
+            self.widget.rowconfigure(i, weight=self.schema.grid_config.r_weights[i])
 
-        for i in range(self.style.grid_config.columns):
-            self.widget.columnconfigure(i, weight=self.style.grid_config.c_weights[i])
+        for i in range(self.schema.grid_config.columns):
+            self.widget.columnconfigure(i, weight=self.schema.grid_config.c_weights[i])
 
     def configure(self):
         self.place_window_center()
         self.configure_grid()
-        for child in self.style.children:
-            child.extra.update(master=self.widget)
+        for child in self.schema.children:
+            if hasattr(child, 'extra'):
+                child.extra.update(master=self.widget)
 
     def run(self):
         AsyncTkinter.async_mainloop(self.widget)
@@ -81,8 +83,8 @@ class BuilderContainer(Builder):
 
 class BuilderComponent(Builder):
     def run(self):
-        if self.style.grid is not None:
-            self.widget.grid(**self.style.grid.extra)
+        if self.schema.grid is not None:
+            self.widget.grid(**self.schema.grid.extra)
         else:
             self.widget.grid()
 
@@ -93,3 +95,17 @@ class BuilderContainerComponent(BuilderContainer, BuilderComponent):
 
     def run(self):
         super(BuilderContainer, self).run()
+
+
+class BuilderStyle(Builder):
+    def reset(self, schema: StyleSchema):
+        logger.info(f'{self.__class__.__name__} reset {schema}')
+        self.schema = schema
+        self._root = self.schema.tk_class(self.schema.master)
+        self.configure()
+
+    def configure(self):
+        if self.schema.config is not None:
+            self.widget.configure(**self.schema.config)
+        if self.schema.map is not None:
+            self.widget.map(**self.schema.map)

@@ -1,13 +1,27 @@
-- name: .
-  master: darkly
-  config:
-      font: [DejaVu Sans Mono, 10]
+-   name: .
+    master: custom_dark
+    config:
+        font: [ DejaVu Sans Mono, 10 ]
 
-- name: Custom.Link.TButton
-  config:
-      foreground: "#bb86fc"
-      borderwidth: 0
-      relief: flat
-  map:
-      foreground: [["pressed", "#ff5555"], ["active", "#d9a2ff"], ["disabled", "#3A3A3A"]]
-      shiftrelief: [["pressed !disabled", 0]]
+-   name: Custom.Link.TButton
+    config:
+        foreground: "#bb86fc"
+        borderwidth: 0
+    map:
+        foreground: [ [ "pressed", "#ff5555" ], [ "active", "#d9a2ff" ], [ "disabled", "#3A3A3A" ] ]
+        shiftrelief: [ [ "pressed !disabled", 0 ] ]
+
+-   name: Custom.TLabel
+    config:
+        font: [ null, 16, "bold" ]
+
+-   name: Treeview.Heading
+    config:
+        font: [ null, 10 ]
+
+-   name: TButton
+    config:
+        relief: flat
+    map:
+        background: [["active", "#1C2029"]]
+        shiftrelief: [[ "pressed", 2 ]]

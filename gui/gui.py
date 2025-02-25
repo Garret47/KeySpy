@@ -2,9 +2,8 @@ import logging
 
 from settings import app_config
 from utils import ConfigReader
-from .ui_config import (ComponentSchema, ContainerSchema, ContainerComponentSchema,
-                        Model, WidgetSchema, StyleSchema, ModelStyle)
-from .builders import BuilderComponent, BuilderContainer, BuilderContainerComponent, BuilderStyle
+from .schemas import *
+from .builders import BuilderComponent, BuilderContainer, BuilderContainerComponent, BuilderTableview, BuilderStyle
 from .registers import Register
 
 logger = logging.getLogger(__name__)
@@ -14,6 +13,7 @@ class UIManager:
     Register.registry(ComponentSchema, BuilderComponent)
     Register.registry(ContainerSchema, BuilderContainer)
     Register.registry(ContainerComponentSchema, BuilderContainerComponent)
+    Register.registry(TableviewSchema, BuilderTableview)
     Register.registry(StyleSchema, BuilderStyle)
 
     def __init__(self):

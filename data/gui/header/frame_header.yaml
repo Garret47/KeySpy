@@ -1,16 +1,14 @@
 type: Frame
-extra:
-    bootstyle: dark
 grid:
     extra:
         row: 0
         column: 0
         rowspan: 1
         columnspan: 7
-        sticky: NEW
+        sticky: new
 grid_config:
-        rows: 0
+        rows: 1
         columns: 7
-        r_weights: []
+        r_weights: [1]
         c_weights: [1, 1, 1, 1, 1, 1, 1]
 children: !include buttons_header.yaml

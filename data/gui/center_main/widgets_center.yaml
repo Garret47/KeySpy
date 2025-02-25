@@ -1,0 +1,53 @@
+-   type: Label
+    extra:
+        text: Active Keyloggers
+        style: Custom.TLabel
+        anchor: center
+    grid:
+        extra:
+            row: 0
+            column: 0
+            rowspan: 1
+            columnspan: 1
+            sticky: nsew
+
+-   type: Tableview
+    extra:
+        coldata:
+            -   text: 'Host'
+                stretch: 1
+                minwidth: 50
+            -   text: 'Ip'
+                stretch: 1
+                minwidth: 30
+            -   text: 'Port'
+                stretch: 1
+                minwidth: 50
+        rowdata: [ [ 'First', '192.168.0.1', 8976 ], [ 'Second', '192.168.0.2', 8972 ]]
+        paginated: True
+        pagesize: 15
+        searchable: False
+        height: 15
+    grid:
+        extra:
+            row: 1
+            column: 0
+            rowspan: 1
+            columnspan: 1
+            sticky: nsew
+            padx: 20
+            pady: 20
+
+-   type: Button
+    extra:
+        text: "Refresh List"
+        takefocus: False
+        bootstyle: TButton
+    grid:
+        extra:
+            row: 2
+            column: 0
+            rowspan: 1
+            columnspan: 1
+            sticky: n
+            pady: [0, 20]

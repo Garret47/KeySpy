@@ -1,7 +1,7 @@
 import logging
 from typing import Type, Union
 
-from .ui_config import WidgetSchema, StyleSchema
+from .schemas import WidgetSchema, StyleSchema
 from .builders import InterfaceBuilder
 
 

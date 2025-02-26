@@ -1,7 +1,8 @@
-from pydantic import field_validator, Field, BaseModel
-from typing import Optional, Annotated, Union, Literal, List
+from pydantic import field_validator, Field, BaseModel, model_validator
+from typing import Optional, Annotated, Union, Literal, List, Callable
 
 from .base import WidgetSchema, Extra, GridConfigSchema
+from .styles import StyleSchema
 from utils import Validator
 
 
@@ -10,14 +11,19 @@ class ComponentSchema(WidgetSchema):
     grid: Optional[Extra] = None
 
 
-class ContainerSchema(WidgetSchema):
-    type: Literal['Window']
+class BaseContainerSchema(WidgetSchema):
+    type: str
     grid_config: Optional[GridConfigSchema] = None
+
+
+class ContainerSchema(BaseContainerSchema):
+    type: Literal['Window']
     children: Optional[List[
         Annotated[
             Union["ContainerComponentSchema", "ComponentSchema", "TableviewSchema"], Field(discriminator='type')
         ]
     ]] = Field(default_factory=list)
+    styles: Optional[List[StyleSchema]] = Field(exclude=True, default=None)
 
     @field_validator('extra', mode='before')
     @classmethod
@@ -28,8 +34,14 @@ class ContainerSchema(WidgetSchema):
         Validator.validate_size(extra.get('minsize'), 'minsize')
         return extra
 
+    @model_validator(mode='after')
+    def set_children(self):
+        if self.styles is not None:
+            self.children = self.styles + self.children
+        return self
 
-class ContainerComponentSchema(ContainerSchema, ComponentSchema):
+
+class ContainerComponentSchema(BaseContainerSchema, ComponentSchema):
     type: Literal["Frame"]
     children: Optional[List[
         Annotated[
@@ -47,7 +59,7 @@ class ContainerComponentSchema(ContainerSchema, ComponentSchema):
 
 class TableviewSchema(ComponentSchema):
     type: Literal['Tableview']
-    bind: Optional[List[str]] = None
+    bind: Optional[List[Union[str, Callable]]] = None
 
 
 class Model(BaseModel):
@@ -57,7 +69,7 @@ class Model(BaseModel):
         TableviewSchema,
         ComponentSchema] = Field(discriminator='type')
 
-    def __new__(cls, **kwargs):
+    def __new__(cls, interface):
         self = super().__new__(cls)
-        super(Model, self).__init__(**kwargs)
+        super(Model, self).__init__(model=interface)
         return self.model

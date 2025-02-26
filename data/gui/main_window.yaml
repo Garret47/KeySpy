@@ -1,4 +1,5 @@
 type: Window
+styles: !include styles.yaml
 extra:
     size: [ 800, 600 ]
     minsize: [ 800, 600 ]

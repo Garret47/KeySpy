@@ -28,6 +28,7 @@
         pagesize: 15
         searchable: False
         height: 15
+    bind: ["<<TreeviewSelect>>", !method click_table]
     grid:
         extra:
             row: 1
@@ -43,6 +44,7 @@
         text: "Refresh List"
         takefocus: False
         bootstyle: TButton
+        command: !method refresh_list
     grid:
         extra:
             row: 2

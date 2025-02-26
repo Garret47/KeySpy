@@ -11,7 +11,6 @@ class AppConfigError(Exception):
 @dataclass
 class GUIConfig:
     FILENAME_MAIN_CONFIG = 'data/gui/main_window.yaml'
-    FILENAME_STYLES_CONFIG = 'data/gui/styles.yaml'
 
 
 @dataclass

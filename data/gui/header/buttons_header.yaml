@@ -3,6 +3,7 @@
         style: Custom.Link.TButton
         text: "Main"
         takefocus: False
+        command: !method main
     grid:
         extra:
             row: 0
@@ -15,6 +16,7 @@
         style: Custom.Link.TButton
         text: "Create"
         takefocus: False
+        command: !method create
     grid:
         extra:
             row: 0
@@ -27,6 +29,7 @@
         style: Custom.Link.TButton
         text: "Info"
         takefocus: False
+        command: !method info
     grid:
         extra:
             row: 0
@@ -40,6 +43,7 @@
         text: "Screenshot"
         takefocus: False
         state: disabled
+        command: !method screenshot
     grid:
         extra:
             row: 0
@@ -53,6 +57,7 @@
         text: "Web Camera"
         takefocus: False
         state: disabled
+        command: !method web_camera
     grid:
         extra:
             row: 0
@@ -66,6 +71,7 @@
         text: "Destruct"
         takefocus: False
         state: disabled
+        command: !method self_destruction
     grid:
         extra:
             row: 0
@@ -79,6 +85,7 @@
         text: "File Manager"
         takefocus: False
         state: disabled
+        command: !method file_manager
     grid:
         extra:
             row: 0

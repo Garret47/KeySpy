@@ -1,7 +1,9 @@
-from utils import AsyncTkinter
+from utils import AsyncTkinter, SchemaBuilderRegister
 from .base import Builder
+from gui.schemas import ComponentSchema, ContainerComponentSchema, ContainerSchema, TableviewSchema
 
 
+@SchemaBuilderRegister.registry(ContainerSchema)
 class BuilderContainer(Builder):
     def place_window_center(self):
         self.widget.place_window_center()
@@ -28,6 +30,7 @@ class BuilderContainer(Builder):
         AsyncTkinter.async_mainloop(self.widget)
 
 
+@SchemaBuilderRegister.registry(ComponentSchema)
 class BuilderComponent(Builder):
     def run(self):
         if self.schema.grid is not None:
@@ -36,6 +39,7 @@ class BuilderComponent(Builder):
             self.widget.grid()
 
 
+@SchemaBuilderRegister.registry(ContainerComponentSchema)
 class BuilderContainerComponent(BuilderContainer, BuilderComponent):
     def place_window_center(self):
         pass
@@ -44,7 +48,8 @@ class BuilderContainerComponent(BuilderContainer, BuilderComponent):
         super(BuilderContainer, self).run()
 
 
+@SchemaBuilderRegister.registry(TableviewSchema)
 class BuilderTableview(BuilderComponent):
     def configure(self):
         if self.schema.bind is not None:
-            self.widget.bind(*self.schema.bind)
+            self.widget.view.bind(*self.schema.bind)

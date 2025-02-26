@@ -1,6 +1,6 @@
 import ttkbootstrap as ttk
-from pydantic import Field, BaseModel, model_validator, field_validator
-from typing import Optional, Dict, Any, List, Type
+from pydantic import Field, BaseModel, model_validator
+from typing import Optional, Dict, Any, Type
 
 
 class StyleSchema(BaseModel):
@@ -25,19 +25,3 @@ class StyleSchema(BaseModel):
     def set_tk_class(self):
         self.tk_class = ttk.Style
         return self
-
-
-class ModelStyle(BaseModel):
-    model: List[StyleSchema] = None
-
-    @field_validator('model', mode='before')
-    @classmethod
-    def set_empty_list(cls, values):
-        if values is None:
-            values = []
-        return values
-
-    def __new__(cls, **kwargs):
-        self = super().__new__(cls)
-        super(ModelStyle, self).__init__(**kwargs)
-        return self.model

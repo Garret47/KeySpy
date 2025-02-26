@@ -1,5 +1,6 @@
 import logging
 
+from utils import SchemaBuilderRegister
 from .base import Builder
 from gui.schemas import StyleSchema
 
@@ -7,6 +8,7 @@ from gui.schemas import StyleSchema
 logger = logging.getLogger(__name__)
 
 
+@SchemaBuilderRegister.registry(StyleSchema)
 class BuilderStyle(Builder):
     def reset(self, schema: StyleSchema):
         logger.info(f'{self.__class__.__name__} reset {schema}')

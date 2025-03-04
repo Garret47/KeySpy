@@ -1,10 +1,12 @@
+from ttkbootstrap import Style
+
 from utils import AsyncTkinter, SchemaBuilderRegister
 from .base import Builder
-from gui.schemas import ComponentSchema, ContainerComponentSchema, ContainerSchema, TableviewSchema
+from gui.schemas import ComponentSchema, ContainerComponentSchema, WindowSchema, TableviewSchema
 
 
-@SchemaBuilderRegister.registry(ContainerSchema)
-class BuilderContainer(Builder):
+@SchemaBuilderRegister.registry(WindowSchema)
+class BuilderWindow(Builder):
     def place_window_center(self):
         self.widget.place_window_center()
         return self
@@ -19,12 +21,16 @@ class BuilderContainer(Builder):
         for i in range(self.schema.grid_config.columns):
             self.widget.columnconfigure(i, weight=self.schema.grid_config.c_weights[i])
 
+    def configure_styles(self):
+        for style in self.schema.styles:
+            style_cls = Style(style.master)
+            style_cls.configure(**style.config)
+            style_cls.map(**style.map)
+
     def configure(self):
         self.place_window_center()
         self.configure_grid()
-        for child in self.schema.children:
-            if hasattr(child, 'extra'):
-                child.extra.update(master=self.widget)
+        self.configure_styles()
 
     def run(self):
         AsyncTkinter.async_mainloop(self.widget)
@@ -33,19 +39,19 @@ class BuilderContainer(Builder):
 @SchemaBuilderRegister.registry(ComponentSchema)
 class BuilderComponent(Builder):
     def run(self):
-        if self.schema.grid is not None:
-            self.widget.grid(**self.schema.grid.extra)
-        else:
-            self.widget.grid()
+        self.widget.grid(**self.schema.grid.model_dump(exclude_none=True))
 
 
 @SchemaBuilderRegister.registry(ContainerComponentSchema)
-class BuilderContainerComponent(BuilderContainer, BuilderComponent):
+class BuilderContainerComponent(BuilderWindow, BuilderComponent):
     def place_window_center(self):
         pass
 
+    def configure_styles(self):
+        pass
+
     def run(self):
-        super(BuilderContainer, self).run()
+        super(BuilderWindow, self).run()
 
 
 @SchemaBuilderRegister.registry(TableviewSchema)

@@ -1,14 +1,13 @@
-from pydantic import field_validator, Field, BaseModel, model_validator
+from pydantic import field_validator, Field, BaseModel
 from typing import Optional, Annotated, Union, Literal, List, Callable
 
-from .base import WidgetSchema, Extra, GridConfigSchema
-from .styles import StyleSchema
+from .base import WidgetSchema, GridConfigSchema, GridSchema, StyleSchema
 from utils import Validator
 
 
 class ComponentSchema(WidgetSchema):
     type: Literal['Button', 'Label']
-    grid: Optional[Extra] = None
+    grid: Optional[GridSchema] = Field(default_factory=GridSchema)
 
 
 class BaseContainerSchema(WidgetSchema):
@@ -16,7 +15,7 @@ class BaseContainerSchema(WidgetSchema):
     grid_config: Optional[GridConfigSchema] = None
 
 
-class ContainerSchema(BaseContainerSchema):
+class WindowSchema(BaseContainerSchema):
     type: Literal['Window']
     children: Optional[List[
         Annotated[
@@ -33,12 +32,6 @@ class ContainerSchema(BaseContainerSchema):
         Validator.validate_size(extra.get('size'), 'size')
         Validator.validate_size(extra.get('minsize'), 'minsize')
         return extra
-
-    @model_validator(mode='after')
-    def set_children(self):
-        if self.styles is not None:
-            self.children = self.styles + self.children
-        return self
 
 
 class ContainerComponentSchema(BaseContainerSchema, ComponentSchema):
@@ -64,7 +57,7 @@ class TableviewSchema(ComponentSchema):
 
 class Model(BaseModel):
     model: Union[
-        ContainerSchema,
+        WindowSchema,
         ContainerComponentSchema,
         TableviewSchema,
         ComponentSchema] = Field(discriminator='type')

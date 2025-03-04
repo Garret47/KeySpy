@@ -1,3 +1,2 @@
 from .base import InterfaceBuilder
-from .widgets import BuilderContainer, BuilderComponent, BuilderContainerComponent, BuilderTableview
-from .styles import BuilderStyle
+from .widgets import BuilderWindow, BuilderComponent, BuilderContainerComponent, BuilderTableview

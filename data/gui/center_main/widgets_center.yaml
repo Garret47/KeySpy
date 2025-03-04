@@ -1,17 +1,18 @@
 -   type: Label
+    name: label_keyloggers
     extra:
         text: Active Keyloggers
         style: Custom.TLabel
         anchor: center
     grid:
-        extra:
-            row: 0
-            column: 0
-            rowspan: 1
-            columnspan: 1
-            sticky: nsew
+        row: 0
+        column: 0
+        rowspan: 1
+        columnspan: 1
+        sticky: nsew
 
 -   type: Tableview
+    name: table_keyloggers
     extra:
         coldata:
             -   text: 'Host'
@@ -30,26 +31,25 @@
         height: 15
     bind: ["<<TreeviewSelect>>", !method click_table]
     grid:
-        extra:
-            row: 1
-            column: 0
-            rowspan: 1
-            columnspan: 1
-            sticky: nsew
-            padx: 20
-            pady: 20
+        row: 1
+        column: 0
+        rowspan: 1
+        columnspan: 1
+        sticky: nsew
+        padx: 20
+        pady: 20
 
 -   type: Button
+    name: btn_refresh
     extra:
         text: "Refresh List"
         takefocus: False
         bootstyle: TButton
         command: !method refresh_list
     grid:
-        extra:
-            row: 2
-            column: 0
-            rowspan: 1
-            columnspan: 1
-            sticky: n
-            pady: [0, 20]
+        row: 2
+        column: 0
+        rowspan: 1
+        columnspan: 1
+        sticky: n
+        pady: [0, 20]

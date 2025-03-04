@@ -1,2 +1,2 @@
-from .builders import BuilderComponent, BuilderContainer, BuilderContainerComponent, BuilderTableview
+from .builders import BuilderComponent, BuilderWindow, BuilderContainerComponent, BuilderTableview
 from .controllers import UIManager

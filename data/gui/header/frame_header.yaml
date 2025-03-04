@@ -1,14 +1,14 @@
 type: Frame
+name: header_frame
 grid:
-    extra:
-        row: 0
-        column: 0
-        rowspan: 1
-        columnspan: 7
-        sticky: new
+    row: 0
+    column: 0
+    rowspan: 1
+    columnspan: 7
+    sticky: new
 grid_config:
-        rows: 1
-        columns: 7
-        r_weights: [1]
-        c_weights: [1, 1, 1, 1, 1, 1, 1]
+    rows: 1
+    columns: 7
+    r_weights: [1]
+    c_weights: [1, 1, 1, 1, 1, 1, 1]
 children: !include buttons_header.yaml

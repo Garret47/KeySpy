@@ -53,6 +53,7 @@ class ContainerComponentSchema(BaseContainerSchema, ComponentSchema):
 class TableviewSchema(ComponentSchema):
     type: Literal['Tableview']
     bind: Optional[List[Union[str, Callable]]] = None
+    selectmode: str = 'browse'
 
 
 class Model(BaseModel):

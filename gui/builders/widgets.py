@@ -59,3 +59,4 @@ class BuilderTableview(BuilderComponent):
     def configure(self):
         if self.schema.bind is not None:
             self.widget.view.bind(*self.schema.bind)
+        self.widget.configure(selectmode=self.schema.selectmode)

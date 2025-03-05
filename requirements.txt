@@ -1,0 +1,9 @@
+annotated-types==0.7.0
+Pillow==9.5.0
+pydantic==2.10.6
+pydantic-settings==2.7.1
+pydantic_core==2.27.2
+python-dotenv==1.0.1
+PyYAML==6.0.2
+ttkbootstrap==1.10.1
+typing_extensions==4.12.2

@@ -1,0 +1,14 @@
+type: Frame
+name: center_frame
+grid:
+    row: 1
+    column: 0
+    rowspan: 2
+    columnspan: 1
+    sticky: NSEW
+grid_config:
+    rows: 3
+    columns: 1
+    r_weights: [1, 20, 1]
+    c_weights: [1]
+children: !include widgets_center.yaml

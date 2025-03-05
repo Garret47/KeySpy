@@ -8,3 +8,6 @@ class ScreenshotCommand(Command):
 class WebcamCommand(Command):
     COMMAND = 'start_web_camera'
 
+
+class FileCommand(Command):
+    COMMAND = 'file_manager'

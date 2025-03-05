@@ -1,0 +1,94 @@
+-   type: Button
+    name: btn_main
+    extra:
+        style: Custom.Link.TButton
+        text: "Main"
+        takefocus: False
+        command: !method main
+    grid:
+        row: 0
+        column: 0
+        columnspan: 1
+        sticky: ew
+
+-   type: Button
+    name: btn_create
+    extra:
+        style: Custom.Link.TButton
+        text: "Create"
+        takefocus: False
+        command: !method create
+    grid:
+        row: 0
+        column: 1
+        columnspan: 1
+        sticky: ew
+
+-   type: Button
+    name: btn_info
+    extra:
+        style: Custom.Link.TButton
+        text: "Info"
+        takefocus: False
+        command: !method info
+    grid:
+        row: 0
+        column: 2
+        columnspan: 1
+        sticky: ew
+
+-   type: Button
+    name: btn_screen
+    extra:
+        style: Custom.Link.TButton
+        text: "Screenshot"
+        takefocus: False
+        state: disabled
+        command: !method screenshot
+    grid:
+        row: 0
+        column: 3
+        columnspan: 1
+        sticky: ew
+
+-   type: Button
+    name: btn_web_camera
+    extra:
+        style: Custom.Link.TButton
+        text: "Web Camera"
+        takefocus: False
+        state: disabled
+        command: !method web_camera
+    grid:
+        row: 0
+        column: 4
+        columnspan: 1
+        sticky: ew
+
+-   type: Button
+    name: btn_destruct
+    extra:
+        style: Custom.Link.TButton
+        text: "Destruct"
+        takefocus: False
+        state: disabled
+        command: !method self_destruction
+    grid:
+        row: 0
+        column: 5
+        columnspan: 1
+        sticky: ew
+
+-   type: Button
+    name: btn_file
+    extra:
+        style: Custom.Link.TButton
+        text: "File Manager"
+        takefocus: False
+        state: disabled
+        command: !method file_manager
+    grid:
+        row: 0
+        column: 6
+        columnspan: 1
+        sticky: ew

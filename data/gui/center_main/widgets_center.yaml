@@ -1,0 +1,55 @@
+-   type: Label
+    name: label_keyloggers
+    extra:
+        text: Active Keyloggers
+        style: Custom.TLabel
+        anchor: center
+    grid:
+        row: 0
+        column: 0
+        rowspan: 1
+        columnspan: 1
+        sticky: nsew
+
+-   type: Tableview
+    name: table_keyloggers
+    extra:
+        coldata:
+            -   text: 'Host'
+                stretch: 1
+                minwidth: 50
+            -   text: 'Ip'
+                stretch: 1
+                minwidth: 30
+            -   text: 'Port'
+                stretch: 1
+                minwidth: 50
+        rowdata: [ [ 'First', '192.168.0.1', 8976 ], [ 'Second', '192.168.0.2', 8972 ]]
+        paginated: True
+        pagesize: 15
+        searchable: False
+        height: 15
+    bind: ["<<TreeviewSelect>>", !method click_table]
+    grid:
+        row: 1
+        column: 0
+        rowspan: 1
+        columnspan: 1
+        sticky: nsew
+        padx: 20
+        pady: 20
+
+-   type: Button
+    name: btn_refresh
+    extra:
+        text: "Refresh List"
+        takefocus: False
+        bootstyle: TButton
+        command: !method refresh_list
+    grid:
+        row: 2
+        column: 0
+        rowspan: 1
+        columnspan: 1
+        sticky: n
+        pady: [0, 20]

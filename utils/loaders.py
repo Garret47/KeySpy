@@ -1,18 +1,21 @@
 import yaml
 import os.path
 
+from .registers import EventHandlerRegister
+
 
 class LoaderMeta(type):
     def __new__(metacls, __name__, __bases__, __dict__):
         cls = super().__new__(metacls, __name__, __bases__, __dict__)
-        if hasattr(cls, 'add_constructor') and hasattr(cls, 'include'):
+        if hasattr(cls, 'add_constructor') and hasattr(cls, 'include') and hasattr(cls, 'method'):
             cls.add_constructor('!include', cls.include)
+            cls.add_constructor('!method', cls.method)
         else:
             raise yaml.YAMLError(f'Class {cls.__name__} is missing the required method for YAML processing')
         return cls
 
 
-class IncludeLoader(yaml.Loader, metaclass=LoaderMeta):
+class Loader(yaml.Loader, metaclass=LoaderMeta):
     def __init__(self, stream):
         try:
             self._root = os.path.split(stream.name)[0]
@@ -27,6 +30,11 @@ class IncludeLoader(yaml.Loader, metaclass=LoaderMeta):
 
         with open(filename, 'r') as f:
             if extension in ('yaml', 'yml'):
-                return yaml.load(f, IncludeLoader)
+                return yaml.load(f, Loader)
             else:
                 return ''.join(f.readlines())
+
+    def method(self, node):
+        function_name = self.construct_scalar(node)
+        function = EventHandlerRegister.get(function_name)
+        return function

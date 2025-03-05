@@ -1,9 +1,0 @@
-type: Frame
-extra:
-    bootstyle: dark
-grid:
-    extra:
-        row: 0
-        column: 0
-        rowspan: 1
-        columnspan: 6

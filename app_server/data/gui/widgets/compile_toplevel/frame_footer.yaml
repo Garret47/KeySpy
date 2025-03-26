@@ -4,6 +4,7 @@ extra:
     text: "Compilation"
     takefocus: False
     bootstyle: TButton
+    command: !method compile_btn
 grid:
     row: 3
     column: 0

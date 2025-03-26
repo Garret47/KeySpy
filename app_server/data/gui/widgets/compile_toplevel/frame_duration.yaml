@@ -30,8 +30,8 @@ children:
     -   type: Spinbox
         name: duration_spinbox
         extra:
-            from_: 1
-            to: 1440
+            from_: 30
+            to: 300
             style: Custom.TSpinbox
         insert: [0, "60"]
         grid:

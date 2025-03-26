@@ -3,7 +3,8 @@ CFLAGS = -g -Wall
 CPPFLAGS = -DEMAIL_USERNAME='"$(EMAIL_USERNAME)"' \
 		   -DEMAIL_PASSWORD='"$(EMAIL_PASSWORD)"' \
 		   -DEMAIL_PORT=$(EMAIL_PORT) \
-		   -DEMAIL_SERVER='"$(EMAIL_SERVER)"'
+		   -DEMAIL_SERVER='"$(EMAIL_SERVER)"' \
+		   -DDURATION=$(DURATION)
 LIBS = -lcurl -lxkbcommon -lxkbcommon-x11 -lX11 -lX11-xcb
 
 SRC_DIR = src
@@ -32,7 +33,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(SRC_DIR)/%.h | $(OBJ_DIR)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(SRC_DIR)/$(MAIN) $(OBJ)
-	$(CC) $(CFLAGS) $^ -o $(TARGET) $(LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -o $(TARGET) $(LIBS)
 
 $(OBJ_DIR):
 	mkdir -p $@

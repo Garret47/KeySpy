@@ -70,7 +70,7 @@ children:
             pady: 5
             padx: [15, 0]
     -   type: Entry
-        name: server_entry
+        name: entry_server
         extra:
             style: Custom.TEntry
         insert: [0, "smtp.gmail.com"]
@@ -92,7 +92,7 @@ children:
             pady: 5
             padx: [15, 0]
     -   type: Entry
-        name: port_entry
+        name: entry_port
         extra:
             style: Custom.TEntry
         insert: [0, "587"]

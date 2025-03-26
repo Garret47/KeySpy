@@ -1,4 +1,4 @@
-from .manager import UIManager
+from gui import UIManager
 from server import Server
 
 
@@ -8,5 +8,5 @@ class BaseEventHandler:
     @classmethod
     def change_state_header_buttons(cls, state: str):
         for btn_name in cls.BUTTONS_HEADER:
-            btn = UIManager().window.find(btn_name).builder.widget
+            btn = UIManager.WINDOW.find(btn_name).builder.widget
             btn.config(state=state)

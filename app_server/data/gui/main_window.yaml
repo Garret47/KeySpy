@@ -1,6 +1,7 @@
 type: Window
 name: main_window
 styles: !include styles.yaml
+func: [10, !method refresh_list]
 extra:
     size: [ 800, 600 ]
     minsize: [ 800, 600 ]
@@ -9,4 +10,4 @@ grid_config:
     columns: 1
     r_weights: [1, 10]
     c_weights: [1]
-children: [!include header/frame_header.yaml, !include center_main/frame_center.yaml]
+children: [!include widgets/header/frame_header.yaml, !include widgets/center/frame_center.yaml]

@@ -1,0 +1,12 @@
+type: Label
+name: compile_label
+extra:
+    text: Settings
+    style: Main.TLabel
+    anchor: center
+grid:
+    row: 0
+    column: 0
+    rowspan: 1
+    columnspan: 1
+    sticky: nsew

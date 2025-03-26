@@ -12,6 +12,10 @@ class Node:
         self._children = []
 
     @property
+    def children(self):
+        return self._children
+
+    @property
     def parent(self):
         if hasattr(self, '_parent'):
             return self._parent

@@ -2,8 +2,7 @@ import time
 import tkinter as tk
 import _tkinter
 import asyncio
-from typing import Callable
-from .registers import EventHandlerRegister
+from typing import Callable, List, Tuple
 
 
 class AsyncTkinter:
@@ -12,9 +11,8 @@ class AsyncTkinter:
         return asyncio.get_event_loop_policy().get_event_loop()
 
     @staticmethod
-    async def mainloop(root: tk.Tk):
+    async def mainloop(root: tk.Tk, time_duration: int = None, func: Callable = None):
         current_time = time.time()
-        func = EventHandlerRegister.get('refresh_list')
 
         while True:
             while root.dooneevent(_tkinter.DONT_WAIT) > 0:
@@ -25,16 +23,16 @@ class AsyncTkinter:
             except tk.TclError:
                 break
 
-            if time.time() - current_time >= 8:
-                if func:
+            if func and time_duration:
+                if time.time() - current_time >= time_duration:
                     func()
-                current_time = time.time()
+                    current_time = time.time()
 
             await asyncio.sleep(0.01)
 
     @staticmethod
-    def async_mainloop(root: tk.Tk):
-        AsyncTkinter.get_event_loop().run_until_complete(AsyncTkinter.mainloop(root))
+    def async_mainloop(root: tk.Tk, time_duration: int = None, func: Callable = None):
+        AsyncTkinter.get_event_loop().run_until_complete(AsyncTkinter.mainloop(root, time_duration, func))
 
     @staticmethod
     def async_handler(async_function: Callable, *args, **kwargs):

@@ -1,7 +1,8 @@
 import logging
-from utils import EventHandlerRegister, AsyncTkinter
+
 from .base import BaseEventHandler
 from server import Server
+from utils import EventHandlerRegister, AsyncTkinter
 
 
 logger = logging.getLogger(__name__)

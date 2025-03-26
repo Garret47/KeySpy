@@ -1,0 +1,104 @@
+type: LabelFrame
+name: frame_email
+extra:
+    text: Settings Email
+grid:
+    row: 1
+    column: 0
+    rowspan: 1
+    columnspan: 1
+    sticky: NSEW
+    padx: 15
+grid_config:
+    rows: 4
+    columns: 2
+    r_weights: [1, 1, 1, 1]
+    c_weights: [1, 2]
+children:
+    -   type: Label
+        name: email
+        extra:
+            text: "Email:"
+            style: Compile.TLabel
+        grid:
+            row: 0
+            column: 0
+            sticky: EW
+            pady: 5
+            padx: [15, 0]
+    -   type: Entry
+        name: email_entry
+        extra:
+            style: Custom.TEntry
+        grid:
+            row: 0
+            column: 1
+            sticky: EW
+            padx: [0, 15]
+            pady: 5
+    -   type: Label
+        name: password
+        extra:
+            text: "Password:"
+            style: Compile.TLabel
+        grid:
+            row: 1
+            column: 0
+            sticky: EW
+            pady: 5
+            padx: [15, 0]
+    -   type: Entry
+        name: entry_password
+        extra:
+            show: "*"
+            style: Custom.TEntry
+        grid:
+            row: 1
+            column: 1
+            sticky: EW
+            padx: [0, 15]
+            pady: 5
+    -   type: Label
+        name: server
+        extra:
+            text: "Server SMTP:"
+            style: Compile.TLabel
+        grid:
+            row: 2
+            column: 0
+            sticky: EW
+            pady: 5
+            padx: [15, 0]
+    -   type: Entry
+        name: server_entry
+        extra:
+            style: Custom.TEntry
+        insert: [0, "smtp.gmail.com"]
+        grid:
+            row: 2
+            column: 1
+            sticky: EW
+            pady: 5
+            padx: [0, 15]
+    -   type: Label
+        name: port
+        extra:
+            text: "Port: "
+            style: Compile.TLabel
+        grid:
+            row: 3
+            column: 0
+            sticky: EW
+            pady: 5
+            padx: [15, 0]
+    -   type: Entry
+        name: port_entry
+        extra:
+            style: Custom.TEntry
+        insert: [0, "587"]
+        grid:
+            row: 3
+            column: 1
+            sticky: EW
+            padx: [0, 15]
+            pady: 5

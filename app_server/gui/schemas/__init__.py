@@ -1,2 +1,3 @@
-from .base import WidgetSchema
-from .widgets import ComponentSchema, ContainerComponentSchema, WindowSchema, TableviewSchema, Model
+from .base import WidgetSchema, StyleSchema
+from .component import ComponentSchema, TableviewSchema, InputSchema
+from .container import ToplevelSchema, WindowSchema, ContainerComponentSchema, Model

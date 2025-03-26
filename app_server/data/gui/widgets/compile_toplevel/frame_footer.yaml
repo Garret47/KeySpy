@@ -1,0 +1,13 @@
+type: Button
+name: compile_btn
+extra:
+    text: "Compilation"
+    takefocus: False
+    bootstyle: TButton
+grid:
+    row: 3
+    column: 0
+    rowspan: 1
+    columnspan: 1
+    sticky: n
+    pady: [20, 20]

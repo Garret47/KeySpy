@@ -11,6 +11,7 @@ class AppConfigError(Exception):
 @dataclass
 class GUIConfig:
     FILENAME_MAIN_CONFIG = 'data/gui/main_window.yaml'
+    FILENAME_COMPILE_CONFIG = 'data/gui/widgets/compile_toplevel/toplevel.yaml'
 
 
 @dataclass

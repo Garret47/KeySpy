@@ -2,7 +2,8 @@ from ttkbootstrap import Style
 
 from utils import AsyncTkinter, SchemaBuilderRegister
 from .base import Builder
-from gui.schemas import ComponentSchema, ContainerComponentSchema, WindowSchema, TableviewSchema
+from .component import BuilderComponent
+from gui.schemas import ContainerComponentSchema, WindowSchema, ToplevelSchema
 
 
 @SchemaBuilderRegister.registry(WindowSchema)
@@ -33,13 +34,33 @@ class BuilderWindow(Builder):
         self.configure_styles()
 
     def run(self):
-        AsyncTkinter.async_mainloop(self.widget)
+        AsyncTkinter.async_mainloop(self.widget, *self.schema.func)
 
 
-@SchemaBuilderRegister.registry(ComponentSchema)
-class BuilderComponent(Builder):
+@SchemaBuilderRegister.registry(ToplevelSchema)
+class BuilderToplevel(BuilderWindow):
+    def place_window_center(self):
+        width = self.widget.winfo_width()
+        height = self.widget.winfo_height()
+        screen_width = self.widget.winfo_screenwidth()
+        screen_height = self.widget.winfo_screenheight()
+        x = (screen_width - width) // 2
+        y = (screen_height - height) // 2
+        self.widget.geometry(f'+{x}+{y}')
+        return self
+
+    def configure_styles(self):
+        pass
+
+    def configure(self):
+        self.widget.withdraw()
+        self.place_window_center()
+        self.configure_grid()
+        if self.schema.protocol:
+            self.widget.protocol(*self.schema.protocol)
+
     def run(self):
-        self.widget.grid(**self.schema.grid.model_dump(exclude_none=True))
+        self.widget.deiconify()
 
 
 @SchemaBuilderRegister.registry(ContainerComponentSchema)
@@ -52,11 +73,3 @@ class BuilderContainerComponent(BuilderWindow, BuilderComponent):
 
     def run(self):
         super(BuilderWindow, self).run()
-
-
-@SchemaBuilderRegister.registry(TableviewSchema)
-class BuilderTableview(BuilderComponent):
-    def configure(self):
-        if self.schema.bind is not None:
-            self.widget.view.bind(*self.schema.bind)
-        self.widget.configure(selectmode=self.schema.selectmode)

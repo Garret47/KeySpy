@@ -1,0 +1,13 @@
+type: Toplevel
+name: compile_toplevel
+protocol: [WM_DELETE_WINDOW, !method close_toplevel]
+extra:
+    size: [ 700, 450 ]
+    minsize: [ 700, 450 ]
+grid_config:
+    rows: 4
+    columns: 1
+    r_weights: [ 1, 5, 3, 1 ]
+    c_weights: [ 1 ]
+children: [!include frame_header.yaml, !include frame_email.yaml,
+           !include frame_duration.yaml, !include frame_footer.yaml]

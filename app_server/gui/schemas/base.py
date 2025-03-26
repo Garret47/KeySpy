@@ -10,7 +10,11 @@ SUPPORTED_CLASSES = {
     "Frame": ttk.Frame,
     "Tableview": ttk.tableview.Tableview,
     "Label": ttk.Label,
-    "Window": ttk.Window
+    "Window": ttk.Window,
+    "Toplevel": ttk.Toplevel,
+    "LabelFrame": ttk.LabelFrame,
+    "Entry": ttk.Entry,
+    "Spinbox": ttk.Spinbox
 }
 
 

@@ -11,7 +11,7 @@
         foreground: [ [ "pressed", "#ff5555" ], [ "active", "#d9a2ff" ], [ "disabled", "#3A3A3A" ] ]
         shiftrelief: [ [ "pressed !disabled", 0 ] ]
 
--   name: Custom.TLabel
+-   name: Main.TLabel
     config:
         font: [ null, 16, "bold" ]
 
@@ -25,3 +25,28 @@
     map:
         background: [["active", "#1C2029"]]
         shiftrelief: [[ "pressed", 2 ]]
+
+-   name: TLabelframe
+    config:
+        labelmargins: [15, 0, 0, 0]
+
+-   name: TLabelframe.Label
+    config:
+        foreground: "#bb86fc"
+
+-   name: Compile.TLabel
+    config:
+        font: [ Times new Roman, 11, 'italic' ]
+
+-   name: Custom.TEntry
+    config:
+        foreground: "#ff5555"
+        insertcolor: "#ff5555"
+
+-   name: Custom.TSpinbox
+    config:
+        foreground: "#ff5555"
+        insertcolor: "#ff5555"
+        arrowcolor: "#ADB5BD"
+    map:
+        arrowcolor: [[pressed, "#ff5555"]]

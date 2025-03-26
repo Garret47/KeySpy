@@ -1,0 +1,42 @@
+type: LabelFrame
+name: frame_duration
+extra:
+    text: Settings Duration
+grid:
+    row: 2
+    column: 0
+    rowspan: 1
+    columnspan: 1
+    sticky: NSEW
+    pady: 15
+    padx: 15
+grid_config:
+    rows: 1
+    columns: 2
+    r_weights: [1]
+    c_weights: [1, 2]
+children:
+    -   type: Label
+        name: duration
+        extra:
+            text: "Duration (min): "
+            style: Compile.TLabel
+        grid:
+            row: 0
+            column: 0
+            sticky: EW
+            pady: 5
+            padx: [15, 0]
+    -   type: Spinbox
+        name: duration_spinbox
+        extra:
+            from_: 1
+            to: 1440
+            style: Custom.TSpinbox
+        insert: [0, "60"]
+        grid:
+            row: 0
+            column: 1
+            sticky: EW
+            padx: [0, 15]
+            pady: 5

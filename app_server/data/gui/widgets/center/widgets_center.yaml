@@ -2,7 +2,7 @@
     name: label_keyloggers
     extra:
         text: Active Keyloggers
-        style: Custom.TLabel
+        style: Main.TLabel
         anchor: center
     grid:
         row: 0

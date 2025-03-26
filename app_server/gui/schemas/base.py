@@ -60,6 +60,12 @@ class StyleSchema(BaseModel):
         return values
 
 
+class ThemeSchema(BaseModel):
+    name: str
+    type: str
+    colors: Dict[str, str]
+
+
 class WidgetSchema(BaseModel):
     extra: Optional[Dict[str, Any]] = Field(default_factory=dict)
     type: str

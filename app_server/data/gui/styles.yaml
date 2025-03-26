@@ -1,5 +1,5 @@
 -   name: .
-    master: custom_dark
+    master: Vlad
     config:
         font: [ DejaVu Sans Mono, 10 ]
 

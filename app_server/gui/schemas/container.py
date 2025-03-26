@@ -1,6 +1,6 @@
 from pydantic import field_validator, Field, BaseModel
 from typing import Optional, Annotated, Union, Literal, List, Tuple, Callable, TypeAlias
-from .base import WidgetSchema, GridConfigSchema, StyleSchema
+from .base import WidgetSchema, GridConfigSchema, StyleSchema, ThemeSchema
 from .component import ComponentSchema, TableviewSchema, InputSchema
 from utils import Validator
 
@@ -23,6 +23,7 @@ class ToplevelSchema(BaseContainerSchema):
 
 class WindowSchema(BaseContainerSchema):
     type: Literal["Window"]
+    themes: Optional[List[ThemeSchema]] = Field(exclude=True, default_factory=list)
     styles: Optional[List[StyleSchema]] = Field(exclude=True, default_factory=list)
     func: Optional[Tuple[int, Callable]] = Field(default_factory=list)
     children: Optional[List[Annotated[window_children, Field(discriminator='type')]]] = Field(default_factory=list)

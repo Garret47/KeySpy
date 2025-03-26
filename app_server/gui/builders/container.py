@@ -1,4 +1,5 @@
 from ttkbootstrap import Style
+from ttkbootstrap.style import ThemeDefinition
 
 from utils import AsyncTkinter, SchemaBuilderRegister
 from .base import Builder
@@ -22,6 +23,10 @@ class BuilderWindow(Builder):
         for i in range(self.schema.grid_config.columns):
             self.widget.columnconfigure(i, weight=self.schema.grid_config.c_weights[i])
 
+    def add_custom_themes(self):
+        for theme in self.schema.themes:
+            Style().register_theme(ThemeDefinition(name=theme.name, themetype=theme.type, colors=theme.colors))
+
     def configure_styles(self):
         for style in self.schema.styles:
             style_cls = Style(style.master)
@@ -31,6 +36,7 @@ class BuilderWindow(Builder):
     def configure(self):
         self.place_window_center()
         self.configure_grid()
+        self.add_custom_themes()
         self.configure_styles()
 
     def run(self):
@@ -66,6 +72,9 @@ class BuilderToplevel(BuilderWindow):
 @SchemaBuilderRegister.registry(ContainerComponentSchema)
 class BuilderContainerComponent(BuilderWindow, BuilderComponent):
     def place_window_center(self):
+        pass
+
+    def add_custom_themes(self):
         pass
 
     def configure_styles(self):

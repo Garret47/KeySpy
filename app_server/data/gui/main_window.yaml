@@ -1,5 +1,6 @@
 type: Window
 name: main_window
+themes: !include themes/custom_themes.yaml
 styles: !include styles.yaml
 func: [10, !method refresh_list]
 extra:

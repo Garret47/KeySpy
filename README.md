@@ -23,9 +23,20 @@ Navigate to the app_server directory and install the required Python dependencie
 cd app_server
 pip install -r requirements.txt
 ```
+
+## 3. Configure environment variables
+
+Before running the server, you need to update the .env_example file with your own configuration.
+After updating the values, rename the file from .env_example to .env:
+```bash
+nano .env_example  # Open the file for editing
+mv .env_example .env
+```
+
+
 ## 3. Run the Python Server
 ### Start server
-After installing the dependencies, you can start the server with:
+You can start the server with:
 ```bash
 python main.py
 ```

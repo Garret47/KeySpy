@@ -2,24 +2,21 @@
 
 ## 1. Install the required libraries
 
-### On Debian-based systems (like Ubuntu)
-To install the necessary dependencies on Debian-based systems (such as Ubuntu), run the following commands:
-
+### Dependencies
+You'll need to install several development libraries. Below is an example for Ubuntu:
 ```bash
 sudo apt update
-sudo apt install libcurl4-openssl-dev libxkbcommon-dev libxkbcommon-x11-dev libx11-dev libx11-xcb-dev gcc makeems (like Fedora):
+sudo apt install libcurl4-openssl-dev libxkbcommon-dev libxkbcommon-x11-dev libx11-dev libx11-xcb-dev gcc make python3 python3-venv
 ```
-### On Red Hat-based systems (like Fedora)
-For Red Hat-based systems (such as Fedora), use these commands:
-```bash
-sudo dnf update
-sudo dnf install libcurl-devel xkbcommon-devel xkbcommon-x11-devel libX11-devel libX11-xcb-devel gcc make
-```
+
+*For other systems, you'll need equivalent packages for libcurl, libxkbcommon (with X11 support), libX11, and standard build tools.*
 
 ## 2. Server Setup (Python)
 ### Install Python dependencies
 Navigate to the app_server directory and install the required Python dependencies using pip:
 ```bash
+python -m venv venv
+source ./venv/bin/activate
 cd app_server
 pip install -r requirements.txt
 ```

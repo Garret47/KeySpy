@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 class Server(metaclass=MetaSingleton):
     TIMEOUT: float = 2.5
     BUFFER: int = 1024
+    DEFAULT_HOSTNAME = 'Unknown'
 
     def __init__(self, host: str, port: int):
         self.host = host
@@ -77,9 +78,12 @@ class Server(metaclass=MetaSingleton):
     async def handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         addr = writer.get_extra_info('peername')
         logger.info(f'client {addr} connect')
-
-        hostname = await asyncio.wait_for(reader.read(256), .5)
-        hostname = hostname.decode().strip() if hostname else "Unknown"
+        try:
+            hostname = await asyncio.wait_for(reader.read(256), .5)
+            hostname = hostname.decode().strip() if hostname else self.DEFAULT_HOSTNAME
+        except asyncio.TimeoutError:
+            logger.info(f'Client did not send a hostname, setting it to {self.DEFAULT_HOSTNAME}')
+            hostname = self.DEFAULT_HOSTNAME
         addr = (hostname, *addr)
         if addr not in self.clients:
             self.clients[addr] = (reader, writer)

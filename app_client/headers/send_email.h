@@ -10,7 +10,7 @@ typedef struct {
 } EmailSender;
 
 int EmailSender_init(EmailSender *sender);
-int send_file_via_email(EmailSender *sender, FileHandler *fh, char **active_window);
+int send_file_via_email(EmailSender *sender, FileHandler *fh);
 void EmailSender_cleanup(EmailSender *sender);
 
 #endif

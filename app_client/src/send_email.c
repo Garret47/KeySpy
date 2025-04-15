@@ -53,17 +53,12 @@ int EmailSender_init(EmailSender *sender) {
 }
 
 
-int send_file_via_email(EmailSender *sender, FileHandler *fh, char **active_window) {
+int send_file_via_email(EmailSender *sender, FileHandler *fh) {
      CURLcode res = CURLE_OK;
 
     if (FileHandler_close(fh)) {
         fprintf(stderr, "Failed to close file before sending\n");
         return 1;
-    }
-
-    if (*active_window){
-        free(*active_window);
-        *active_window = NULL;
     }
 
     curl_mime *mime = curl_mime_init(sender->curl);

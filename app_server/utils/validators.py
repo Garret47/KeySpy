@@ -22,9 +22,16 @@ class ValidatorCompileEnv:
     @classmethod
     def validate_duration(cls, duration: str):
         tmp = (f"The value of Duration is invalid. "
-               f"It must be a number in the range of 30 to 300, but received: {duration}")
+               f"It must be a number in the range of 30 to 300, but received: '{duration}'")
         msg = ["Invalid Duration", tmp]
         if duration.isdigit():
             num = int(duration)
             return 30 <= num <= 300, msg
         return False, msg
+
+    @classmethod
+    def validate_port(cls, port: str):
+        msg = ["Invalid Port", f"The value of server_port is invalid. It must be an integer number: '{port}'"]
+        if not port.isdigit():
+            return False, msg
+        return True, msg

@@ -6,7 +6,7 @@ extra:
     bootstyle: TButton
     command: !method compile_btn
 grid:
-    row: 3
+    row: 4
     column: 0
     rowspan: 1
     columnspan: 1

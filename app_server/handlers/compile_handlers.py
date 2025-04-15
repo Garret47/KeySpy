@@ -1,6 +1,7 @@
 import logging
 import os
 import subprocess
+import ttkbootstrap as ttk
 
 from gui import UIManager
 from utils import EventHandlerRegister, AsyncTkinter, ValidatorCompileEnv, ShowMessageBox
@@ -26,20 +27,30 @@ class CompileHandler:
     @EventHandlerRegister.registry("compile_btn")
     def click_compile():
         env = os.environ.copy()
-        entries = {
-            "email_entry": app_config.compile.ENV_EMAIL,
-            "entry_password": app_config.compile.ENV_PASSWORD,
-            "entry_server": app_config.compile.ENV_SERVER,
-            "entry_port": app_config.compile.ENV_PORT,
-            "duration_spinbox": app_config.compile.ENV_DURATION
-        }
-        for entry in entries:
-            env[entries[entry]] = UIManager.WINDOW.find(entry).builder.widget.get()
+        ui, cfg = UIManager.WINDOW, app_config.compile
 
-        answer = ValidatorCompileEnv.validate_duration(env[app_config.compile.ENV_DURATION])
-        if not answer[0]:
-            ShowMessageBox.show('show_error', *answer[1])
-            return
+        entries = {
+            "email_entry": cfg.ENV_EMAIL_USERNAME,
+            "entry_password": cfg.ENV_EMAIL_PASSWORD,
+            "entry_server": cfg.ENV_EMAIL_SERVER,
+            "entry_port": cfg.ENV_EMAIL_PORT,
+            "duration_spinbox": cfg.ENV_EMAIL_DURATION,
+            "server_ip_entry": cfg.ENV_SERVER_IP,
+            "server_port_entry": cfg.ENV_SERVER_PORT
+        }
+        validators = [(ValidatorCompileEnv.validate_duration, cfg.ENV_EMAIL_DURATION),
+                      (ValidatorCompileEnv.validate_port, cfg.ENV_SERVER_PORT)]
+
+        for entry in entries:
+            env[entries[entry]] = ui.find(entry).builder.widget.get()
+
+        for validator, key in validators:
+            ok, msg = validator(env[key])
+            if not ok:
+                ui.root.builder.widget.attributes("-topmost", True)
+                ShowMessageBox.show('show_error', *msg)
+                ui.root.builder.widget.attributes("-topmost", False)
+                return
 
         if not app_config.CLIENT_DIR.exists():
             logger.error(f'Client not exists, {app_config.CLIENT_DIR}')

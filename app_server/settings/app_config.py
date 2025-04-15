@@ -11,11 +11,13 @@ class AppConfigError(Exception):
 
 @dataclass
 class CompileConfig:
-    ENV_EMAIL: str = "EMAIL_USERNAME"
-    ENV_PASSWORD: str = "EMAIL_PASSWORD"
-    ENV_PORT: str = "EMAIL_PORT"
-    ENV_SERVER: str = "EMAIL_SERVER"
-    ENV_DURATION: str = "DURATION"
+    ENV_EMAIL_USERNAME: str = "EMAIL_USERNAME"
+    ENV_EMAIL_PASSWORD: str = "EMAIL_PASSWORD"
+    ENV_EMAIL_PORT: str = "EMAIL_PORT"
+    ENV_EMAIL_SERVER: str = "EMAIL_SERVER"
+    ENV_EMAIL_DURATION: str = "DURATION"
+    ENV_SERVER_IP: str = "SERVER_IP"
+    ENV_SERVER_PORT: str = "SERVER_PORT_STR"
 
 
 @dataclass

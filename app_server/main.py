@@ -1,12 +1,13 @@
-import logging
+import logging.config
 
 from settings import env_config, app_config
 from server import Server
 from gui import UIManager
-from utils import AsyncTkinter
+from utils import AsyncTkinter, ConfigReader
 from handlers import *
 
-app_config.configure_logging()
+LOGGING_CONFIG = ConfigReader.read(app_config.FILE_LOGGING_CONFIG)
+logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
 

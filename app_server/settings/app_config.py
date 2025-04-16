@@ -1,8 +1,5 @@
 from dataclasses import dataclass, field
 from pathlib import Path
-import logging.config
-
-from utils import ConfigReader
 
 
 class AppConfigError(Exception):
@@ -28,16 +25,10 @@ class GUIConfig:
 
 @dataclass
 class AppConfig:
-    print('dawdwdwada')
     FILE_LOGGING_CONFIG: Path = Path('data/logging.yaml')
-    LOGGER_NAME: str = 'console'
     CLIENT_DIR: Path = Path('../app_client/')
     gui: GUIConfig = field(default_factory=GUIConfig)
     compile: CompileConfig = field(default_factory=CompileConfig)
-
-    def configure_logging(self):
-        LOGGING_CONFIG = ConfigReader.read(self.FILE_LOGGING_CONFIG)
-        logging.config.dictConfig(LOGGING_CONFIG)
 
 
 app_config = AppConfig()

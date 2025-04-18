@@ -1,10 +1,8 @@
 import logging
 import os
 import subprocess
-import ttkbootstrap as ttk
 
-from gui import UIManager
-from utils import EventHandlerRegister, AsyncTkinter, ValidatorCompileEnv, ShowMessageBox
+from utils import EventHandlerRegister, AsyncTkinter, ValidatorCompileEnv, ShowMessageBox, WidgetRegistry
 from settings import app_config
 
 logger = logging.getLogger(__name__)
@@ -15,19 +13,16 @@ class CompileHandler:
     @EventHandlerRegister.registry("close_toplevel")
     def close_toplevel():
         logger.info('Close Toplevel Compile')
-        logger.debug(f'Window before close: {list(elem.name for elem in UIManager.WINDOW.children)}')
-        toplevel = UIManager.WINDOW.find('compile_toplevel')
-        toplevel.builder.widget.destroy()
-        toplevel.clear()
-        logger.debug(f'Window after close: {list(elem.name for elem in UIManager.WINDOW.children)}')
-        btn = UIManager.WINDOW.find('btn_create')
-        btn.builder.widget.config(state='normal')
+        toplevel = WidgetRegistry.get('compile_toplevel')
+        toplevel.destroy()
+        btn = WidgetRegistry.get('btn_create')
+        btn.config(state='normal')
 
     @staticmethod
     @EventHandlerRegister.registry("compile_btn")
     def click_compile():
         env = os.environ.copy()
-        ui, cfg = UIManager.WINDOW, app_config.compile
+        cfg = app_config.compile
 
         entries = {
             "email_entry": cfg.ENV_EMAIL_USERNAME,
@@ -42,15 +37,13 @@ class CompileHandler:
                       (ValidatorCompileEnv.validate_port, cfg.ENV_SERVER_PORT)]
 
         for entry in entries:
-            env[entries[entry]] = ui.find(entry).builder.widget.get()
+            env[entries[entry]] = WidgetRegistry.get(entry).get()
 
-        for validator, key in validators:
-            ok, msg = validator(env[key])
-            if not ok:
-                ui.root.builder.widget.attributes("-topmost", True)
-                ShowMessageBox.show('show_error', *msg)
-                ui.root.builder.widget.attributes("-topmost", False)
-                return
+        # for validator, key in validators:
+        #     ok, msg = validator(env[key])
+        #     if not ok:
+        #         ShowMessageBox.show('show_error', *msg)
+        #         return
 
         if not app_config.CLIENT_DIR.exists():
             logger.error(f'Client not exists, {app_config.CLIENT_DIR}')

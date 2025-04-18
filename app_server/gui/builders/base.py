@@ -39,7 +39,7 @@ class Builder(InterfaceBuilder, ABC):
         self.reset(schema, master)
 
     def reset(self, schema: WidgetSchema, master: Union[None, tk.Widget] = None):
-        logger.info(f'{self.__class__.__name__} reset {schema}')
+        logger.info(f'{self.__class__.__name__} create {schema.name}, master: {master}')
         self.schema = schema
         if master:
             self._root = self.schema.tk_class(master=master, **self.schema.extra)

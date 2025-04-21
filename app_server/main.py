@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def main():
     server = Server(env_config.HOST, env_config.PORT)
     AsyncTkinter.get_event_loop().create_task(server.start())
-    UIManager.render_main_window()
+    UIManager.render_window(app_config.gui.FILENAME_MAIN_CONFIG)
 
 
 if __name__ == '__main__':

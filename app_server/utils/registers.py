@@ -46,29 +46,29 @@ class EventHandlerRegister:
 
 
 class WidgetRegistry:
-    _registry = {}
-    _widget_id_to_name = {}
-    _root = None
+    def __init__(self):
+        self._registry = weakref.WeakValueDictionary()
+        self._root_name = None
+        self._widget_id_to_name = {}
 
-    @classmethod
-    def __on_root_destroyed(cls, ref: weakref.ref):
-        logger.debug("Root window has been destroyed.")
-        cls._root = None
+    @property
+    def root(self):
+        return self._registry.get(self._root_name)
 
-    @classmethod
-    def _on_widget_destroy(cls, ref: weakref.ref, widget_id):
-        name = cls._widget_id_to_name.pop(widget_id, None)
-        cls._registry.pop(name, None)
-        logger.info(f"GC clean, destroy triggered: strong references ended for '{name}' (id={widget_id})")
+    def _destroy_widget(self, id_widget: int):
+        if id_widget not in self._widget_id_to_name:
+            return
+        name = self._widget_id_to_name.pop(id_widget, None)
+        self._registry.pop(name, None)
+        if name == self._root_name:
+            self._root_name = None
+            logger.debug(f"Root window has been destroyed, {name}")
+        else:
+            logger.debug(f"Event destroy: widget '{name}'")
+        logger.debug(f"Current registry: (size: {len(self._registry)}, names: {set(self._registry.keys())}")
 
-    @classmethod
-    def _event_destroy_widget(cls, event: tk.Event):
-        name = cls._widget_id_to_name.pop(id(event.widget), None)
-        ref = cls._registry.pop(name, None)
-        logger.debug(f"Event destroy: widget '{name}'")
-        if isinstance(event.widget, tk.Tk):
-            cls.__on_root_destroyed(ref)
-        logger.debug(f"Current registry: (size: {len(cls._registry)}, names: {cls._registry.keys()})")
+    def _event_destroy_widget(self, event: tk.Event):
+        self._destroy_widget(id(event.widget))
 
     @staticmethod
     def check_error(func):
@@ -79,37 +79,31 @@ class WidgetRegistry:
                 logger.warning(f"Error in {func.__name__}: {str(e)}")
         return wrapper
 
-    @classmethod
     @check_error
-    def registry(cls, name, widget):
-        if isinstance(widget, tk.Tk):
-            cls._root = weakref.ref(widget, cls.__on_root_destroyed)
-        cls._registry[name] = weakref.ref(widget, lambda ref, n=name: cls._on_widget_destroy(ref, n))
-        cls._widget_id_to_name[id(widget)] = name
-        widget.bind("<Destroy>", cls._event_destroy_widget, add="+")
+    def registry(self, name, widget):
+        if isinstance(widget, tk.Tk) and self._root_name is None:
+            self._root_name = name
+        self._registry[name] = widget
+        self._widget_id_to_name[id(widget)] = name
+        widget.bind("<Destroy>", self._event_destroy_widget, add="+")
+        weakref.finalize(widget, self._destroy_widget, id(widget))
 
-    @classmethod
     @check_error
-    def get(cls, name):
-        ref = cls._registry.get(name)
-        if ref:
-            widget = ref()
+    def get(self, name):
+        widget = self._registry.get(name)
+        if widget:
             if not widget.winfo_exists():
                 logger.warning(f"Widget '{name}' (id={id(widget)}) does not exist. Cleaning up")
-                cls._on_widget_destroy(ref, id(widget))
+                self._destroy_widget(id(widget))
                 return None
             return widget
 
-    @classmethod
     @check_error
-    def all(cls):
-        logger.debug(f"Fetching all widgets. Current registry size: {len(cls._registry)}")
-        res = {name: ref() for name, ref in cls._registry.items()}
+    def all(self, exclude_hide=False):
+        if exclude_hide:
+            res = {name: widget for name, widget in self._registry.items() if widget.winfo_ismapped()}
+        else:
+            res = {name: widget for name, widget in self._registry.items()}
+        logger.debug(f"Fetching all widgets. Current registry size: {len(self._registry)} "
+                     f"Returning {len(res)} widgets, {res.keys()}")
         return res
-
-    @classmethod
-    @check_error
-    def root(cls):
-        root = cls._root() if cls._root else None
-        logger.debug(f"Root widget: {root}")
-        return root

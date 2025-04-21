@@ -1,10 +1,12 @@
-from pydantic import field_validator, Field, BaseModel
+import logging
+
+from pydantic import field_validator, Field, BaseModel, model_validator
 from typing import Optional, Annotated, Union, Literal, List, Tuple, Callable, TypeAlias
 from .base import WidgetSchema, GridConfigSchema, StyleSchema, ThemeSchema
 from .component import ComponentSchema, TableviewSchema, InputSchema
 from utils import Validator
 
-
+logger = logging.getLogger(__name__)
 base_children: TypeAlias = Union["ContainerComponentSchema", ComponentSchema, TableviewSchema, InputSchema]
 window_children: TypeAlias = Union[base_children, "ToplevelSchema"]
 schemas: TypeAlias = Union[window_children, "WindowSchema"]
@@ -50,9 +52,25 @@ class ContainerComponentSchema(BaseContainerSchema, ComponentSchema):
 
 
 class Model(BaseModel):
-    model: schemas = Field(discriminator='type')
+    interface: schemas = Field(discriminator='type')
+    names: set[str] = Field(default_factory=set, exclude=True)
 
-    def __new__(cls, interface):
-        self = super().__new__(cls)
-        super(Model, self).__init__(model=interface)
-        return self.model
+    def __init__(self, config: dict):
+        super().__init__(interface=config)
+
+    @model_validator(mode='after')
+    def validate_names(self):
+        names = []
+
+        def collect_names(schema: WidgetSchema):
+            names.append(schema.name)
+            for child in getattr(schema, 'children', []):
+                collect_names(child)
+
+        collect_names(self.interface)
+        self.names = set(names)
+        if len(self.names) != len(names):
+            logger.critical(f"Duplicate names found in GUI schema. Names: {names}")
+            raise ValueError("Duplicate widget names found in GUI schema")
+
+        return self

@@ -19,8 +19,10 @@ class CompileConfig:
 
 @dataclass
 class GUIConfig:
-    FILENAME_MAIN_CONFIG: Path = Path('data/gui/main_window.yaml')
+    FILENAME_MAIN_CONFIG: Path = Path('data/gui/windows/main_window.yaml')
     FILENAME_COMPILE_CONFIG: Path = Path('data/gui/widgets/compile_toplevel/toplevel.yaml')
+    FILENAME_SCREEN_CONFIG: Path = Path('data/gui/windows/screen_window.yaml')
+    FILENAME_WEB_CONFIG: Path = Path('data/gui/windows/web_window.yaml')
 
 
 @dataclass

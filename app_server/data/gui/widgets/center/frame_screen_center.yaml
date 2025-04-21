@@ -1,0 +1,22 @@
+type: Frame
+name: screenshot_frame
+grid:
+    row: 1
+    column: 0
+    rowspan: 2
+    columnspan: 1
+    sticky: NSEW
+grid_config:
+    rows: 1
+    columns: 1
+    r_weights: [1]
+    c_weights: [1]
+children:
+    -   type: Label
+        name: screenshot_label
+        extra:
+            text: "Screenshot"
+            style: Compile.TLabel
+        grid:
+            row: 0
+            column: 0

@@ -2,7 +2,7 @@ type: Window
 name: main_window
 themes: !include ../custom_themes.yaml
 styles: !include ../styles.yaml
-func: [10, !method refresh_list]
+func: [10, !method "!var callback_names.CLICK_REFRESH"]
 extra:
     size: [ 800, 600 ]
     minsize: [ 800, 600 ]

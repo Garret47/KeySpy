@@ -16,7 +16,7 @@ grid_config:
     c_weights: [1, 2]
 children:
     -   type: Label
-        name: email
+        name: email_label
         extra:
             text: "Email:"
             style: Compile.TLabel
@@ -27,9 +27,10 @@ children:
             pady: 5
             padx: [15, 0]
     -   type: Entry
-        name: email_entry
+        name: !var widget_names.EMAIL_ENTRY
         extra:
             style: Custom.TEntry
+        insert: [0, !user_var email_private_settings.EMAIL_USERNAME]
         grid:
             row: 0
             column: 1
@@ -37,7 +38,7 @@ children:
             padx: [0, 15]
             pady: 5
     -   type: Label
-        name: password
+        name: password_label
         extra:
             text: "Password:"
             style: Compile.TLabel
@@ -48,10 +49,11 @@ children:
             pady: 5
             padx: [15, 0]
     -   type: Entry
-        name: entry_password
+        name: !var widget_names.ENTRY_PASSWORD
         extra:
             show: "*"
             style: Custom.TEntry
+        insert: [0, !user_var email_private_settings.EMAIL_PASSWORD]
         grid:
             row: 1
             column: 1
@@ -59,7 +61,7 @@ children:
             padx: [0, 15]
             pady: 5
     -   type: Label
-        name: server
+        name: server_label
         extra:
             text: "Server SMTP:"
             style: Compile.TLabel
@@ -70,10 +72,10 @@ children:
             pady: 5
             padx: [15, 0]
     -   type: Entry
-        name: entry_server
+        name: !var widget_names.ENTRY_SERVER
         extra:
             style: Custom.TEntry
-        insert: [0, "smtp.gmail.com"]
+        insert: [0, !user_var email_settings.EMAIL_SMTP]
         grid:
             row: 2
             column: 1
@@ -81,7 +83,7 @@ children:
             pady: 5
             padx: [0, 15]
     -   type: Label
-        name: port
+        name: port_label
         extra:
             text: "Port: "
             style: Compile.TLabel
@@ -92,10 +94,10 @@ children:
             pady: 5
             padx: [15, 0]
     -   type: Entry
-        name: entry_port
+        name: !var widget_names.ENTRY_PORT
         extra:
             style: Custom.TEntry
-        insert: [0, "587"]
+        insert: [0, !user_var email_settings.EMAIL_PORT]
         grid:
             row: 3
             column: 1

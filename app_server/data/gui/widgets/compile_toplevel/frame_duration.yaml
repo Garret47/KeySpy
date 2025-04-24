@@ -17,7 +17,7 @@ grid_config:
     c_weights: [1, 2]
 children:
     -   type: Label
-        name: duration
+        name: duration_label
         extra:
             text: "Duration (min): "
             style: Compile.TLabel
@@ -28,7 +28,7 @@ children:
             pady: 5
             padx: [15, 0]
     -   type: Spinbox
-        name: duration_spinbox
+        name: !var widget_names.DURATION_SPINBOX
         extra:
             from_: 30
             to: 300

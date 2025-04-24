@@ -12,7 +12,7 @@
         sticky: nsew
 
 -   type: Tableview
-    name: table_keyloggers
+    name: !var widget_names.TABLE_KEYLOGGERS
     extra:
         coldata:
             -   text: 'Host'
@@ -24,12 +24,11 @@
             -   text: 'Port'
                 stretch: 1
                 minwidth: 50
-        rowdata: [ [ 'First', '192.168.0.1', 8976 ], [ 'Second', '192.168.0.2', 8972 ]]
         paginated: True
         pagesize: 15
         searchable: False
         height: 15
-    bind: ["<<TreeviewSelect>>", !method click_table]
+    bind: ["<<TreeviewSelect>>", !method "!var callback_names.CLICK_TABLE"]
     grid:
         row: 1
         column: 0
@@ -45,7 +44,7 @@
         text: "Refresh List"
         takefocus: False
         bootstyle: TButton
-        command: !method refresh_list
+        command: !method "!var callback_names.CLICK_REFRESH"
     grid:
         row: 2
         column: 0

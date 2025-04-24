@@ -1,6 +1,6 @@
 type: Toplevel
-name: compile_toplevel
-protocol: [WM_DELETE_WINDOW, !method close_toplevel]
+name: !var widget_names.COMPILE_TOPLEVEL
+protocol: [WM_DELETE_WINDOW, !method "!var callback_names.CLICK_CLOSE_TOPLEVEL"]
 extra:
     size: [ 700, 530 ]
     minsize: [ 700, 530 ]

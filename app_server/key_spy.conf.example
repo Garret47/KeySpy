@@ -1,0 +1,13 @@
+# Rename this file to key_spy.conf and update the values with your own configuration.
+
+#Server settings
+LISTEN_HOST=0.0.0.0
+LISTEN_PORT=8080
+
+#Email Settings
+EMAIL_SMTP="smtp.gmail.com"
+EMAIL_PORT=587
+
+#Credentials, (Server connection settings for client)
+SERVER_IP=192.168.1.1
+SERVER_PORT=8080

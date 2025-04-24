@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from pathlib import Path
+from .gui_config import GUI
 
 
 class AppConfigError(Exception):
@@ -18,18 +19,10 @@ class CompileConfig:
 
 
 @dataclass
-class GUIConfig:
-    FILENAME_MAIN_CONFIG: Path = Path('data/gui/windows/main_window.yaml')
-    FILENAME_COMPILE_CONFIG: Path = Path('data/gui/widgets/compile_toplevel/toplevel.yaml')
-    FILENAME_SCREEN_CONFIG: Path = Path('data/gui/windows/screen_window.yaml')
-    FILENAME_WEB_CONFIG: Path = Path('data/gui/windows/web_window.yaml')
-
-
-@dataclass
 class AppConfig:
     FILE_LOGGING_CONFIG: Path = Path('data/logging.yaml')
     CLIENT_DIR: Path = Path('../app_client/')
-    gui: GUIConfig = field(default_factory=GUIConfig)
+    gui: GUI = field(default_factory=GUI)
     compile: CompileConfig = field(default_factory=CompileConfig)
 
 

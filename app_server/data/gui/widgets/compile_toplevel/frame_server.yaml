@@ -17,7 +17,7 @@ grid_config:
     c_weights: [1, 2]
 children:
     -   type: Label
-        name: server_ip
+        name: server_ip_label
         extra:
             text: "Server ip: "
             style: Compile.TLabel
@@ -28,9 +28,10 @@ children:
             pady: 5
             padx: [15, 0]
     -   type: Entry
-        name: server_ip_entry
+        name: !var widget_names.SERVER_IP_ENTRY
         extra:
             style: Custom.TEntry
+        insert: [0, !user_var client_settings.SERVER_IP]
         grid:
             row: 0
             column: 1
@@ -38,7 +39,7 @@ children:
             padx: [0, 15]
             pady: 5
     -   type: Label
-        name: server_port
+        name: server_port_label
         extra:
             text: "Server port: "
             style: Compile.TLabel
@@ -49,9 +50,10 @@ children:
             pady: 5
             padx: [ 15, 0 ]
     -   type: Entry
-        name: server_port_entry
+        name: !var widget_names.SERVER_PORT_ENTRY
         extra:
             style: Custom.TEntry
+        insert: [0, !user_var client_settings.SERVER_PORT]
         grid:
             row: 1
             column: 1

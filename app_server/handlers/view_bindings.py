@@ -1,6 +1,7 @@
 import logging
 
 from .base import BaseEventHandler
+from settings import app_config
 from server import Server
 from utils import EventHandlerRegister, AsyncTkinter
 
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class ViewMainBind:
     @staticmethod
-    @EventHandlerRegister.registry('click_table')
+    @EventHandlerRegister.registry(app_config.gui.keys.callback_names.CLICK_TABLE)
     def click_tableview_element(event):
         logger.info('Click Table')
         server = Server()

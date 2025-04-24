@@ -4,7 +4,7 @@ extra:
     text: "Compilation"
     takefocus: False
     bootstyle: TButton
-    command: !method compile_btn
+    command: !method "!var callback_names.CLICK_COMPILE"
 grid:
     row: 4
     column: 0

@@ -1,11 +1,10 @@
+from settings import app_config
 from gui import UIManager
 
 
 class BaseEventHandler:
-    BUTTONS_HEADER = ['btn_screen', 'btn_web_camera', 'btn_destruct', 'btn_file']
-
     @classmethod
     def change_state_header_buttons(cls, state: str):
-        for btn_name in cls.BUTTONS_HEADER:
+        for btn_name in app_config.gui.keys.widget_names.BUTTONS_HEADER_CLIENT:
             btn = UIManager.REGISTER.get(btn_name)
             btn.config(state=state)

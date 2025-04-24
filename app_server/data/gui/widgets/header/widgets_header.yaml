@@ -4,7 +4,7 @@
         style: Custom.Link.TButton
         text: "Main"
         takefocus: False
-        command: !method main
+        command: !method "!var callback_names.CLICK_MAIN"
     grid:
         row: 0
         column: 0
@@ -12,12 +12,12 @@
         sticky: ew
 
 -   type: Button
-    name: btn_create
+    name: !var widget_names.BUTTON_CREATE
     extra:
         style: Custom.Link.TButton
         text: "Create"
         takefocus: False
-        command: !method create
+        command: !method "!var callback_names.CLICK_CREATE"
     grid:
         row: 0
         column: 1
@@ -30,7 +30,7 @@
         style: Custom.Link.TButton
         text: "Info"
         takefocus: False
-        command: !method info
+        command: !method "!var callback_names.CLICK_INFO"
     grid:
         row: 0
         column: 2
@@ -38,13 +38,13 @@
         sticky: ew
 
 -   type: Button
-    name: btn_screen
+    name: !var widget_names.BUTTON_SCREEN
     extra:
         style: Custom.Link.TButton
         text: "Screenshot"
         takefocus: False
         state: disabled
-        command: !method screenshot
+        command: !method "!var callback_names.CLICK_SCREEN"
     grid:
         row: 0
         column: 3
@@ -52,13 +52,13 @@
         sticky: ew
 
 -   type: Button
-    name: btn_web_camera
+    name: !var widget_names.BUTTON_WEB
     extra:
         style: Custom.Link.TButton
         text: "Web Camera"
         takefocus: False
         state: disabled
-        command: !method web_camera
+        command: !method "!var callback_names.CLICK_WEB"
     grid:
         row: 0
         column: 4
@@ -66,13 +66,13 @@
         sticky: ew
 
 -   type: Button
-    name: btn_destruct
+    name: !var widget_names.BUTTON_DESTRUCT
     extra:
         style: Custom.Link.TButton
         text: "Destruct"
         takefocus: False
         state: disabled
-        command: !method self_destruction
+        command: !method "!var callback_names.CLICK_DESTRUCT"
     grid:
         row: 0
         column: 5
@@ -80,13 +80,13 @@
         sticky: ew
 
 -   type: Button
-    name: btn_file
+    name: !var widget_names.BUTTON_FILE
     extra:
         style: Custom.Link.TButton
         text: "File Manager"
         takefocus: False
         state: disabled
-        command: !method file_manager
+        command: !method "!var callback_names.CLICK_FILE"
     grid:
         row: 0
         column: 6

@@ -21,16 +21,26 @@ cd app_server
 pip install -r requirements.txt
 ```
 
-## 3. Configure environment variables
-
-Before running the server, you need to update the .env_example file with your own configuration.
-After updating the values, rename the file from .env_example to .env:
+## 3. Configure the application
+### Configuration file
+The application uses a configuration file named key_spy.conf.
+Copy the example file and update it with your settings.
 ```bash
-nano .env_example  # Open the file for editing
-mv .env_example .env
+cp key_spy.conf.example key_spy.conf
+nano key_spy.conf  # Open the file for editing
 ```
-
-
+### Environment variables (optional)
+You can also create an .env file to store sensitive data like passwords and usernames:
+```bash
+touch .env
+nano .env  # Open the file for editing
+```
+Add the following credentials to the .env file:
+```
+EMAIL_USERNAME=your_email@example.com
+EMAIL_PASSWORD=your_password
+```
+These credentials will be automatically filled in the input fields when creating a client.
 ## 3. Run the Python Server
 ### Start server
 You can start the server with:

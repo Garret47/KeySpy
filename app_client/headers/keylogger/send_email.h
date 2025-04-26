@@ -1,8 +1,7 @@
-#ifndef SendEmail_H_SENTRY
-#define SendEmail_H_SENTRY
+#ifndef Keylogger_SendEmail_H_SENTRY
+#define Keylogger_SendEmail_H_SENTRY
 
 #include <curl/curl.h>
-#include "file_handler.h"
 
 typedef struct {
     CURL *curl;

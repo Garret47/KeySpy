@@ -48,7 +48,6 @@ int init_connection(const char *ip, const char *port) {
     }
 
     while (connect(sock, res->ai_addr, res->ai_addrlen) < 0) {
-        perror("connect");
         fd_set read_fds;
         struct timeval tv;
 
@@ -72,8 +71,8 @@ int init_connection(const char *ip, const char *port) {
             return -1;
         }
     }
-
     send(sock, hostname, strlen(hostname), MSG_NOSIGNAL);
+    printf("Connect to server addr: %s, port: %s\n", ip, port);
 
     freeaddrinfo(res);
     return sock;

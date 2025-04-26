@@ -1,5 +1,5 @@
-#ifndef FileHandler_H_SENTRY
-#define FileHandler_H_SENTRY
+#ifndef Keylogger_FIle_H_SENTRY
+#define Keylogger_FIle_H_SENTRY
 
 #define FILENAME "/tmp/log.txt"
 #define MODE "w"

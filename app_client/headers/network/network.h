@@ -1,5 +1,5 @@
-#ifndef Network_H_SENTRY
-#define Network_H_SENTRY
+#ifndef Network_Network_H_SENTRY
+#define Network_Network_H_SENTRY
 
 int init_connection(const char *ip, const char *port);
 int reconnect(int *sock, const char *ip, const char *port);

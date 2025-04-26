@@ -16,11 +16,13 @@ HEAD_DIR = headers
 BIN_DIR = ..
 TARGET = $(BIN_DIR)/client.out
 CFLAGS = -g -Wall -I$(HEAD_DIR)
-
 MAIN = client.c
-SRC = $(filter-out $(SRC_DIR)/$(MAIN), $(wildcard $(SRC_DIR)/*.c))
+
+SRC = $(shell find $(SRC_DIR) -name "*.c" ! -name "$(MAIN)")
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
-DEBUG_CFLAGS = -fsanitize=thread -g -O0 -DDEBUG
+HEAD = $(shell find $(HEAD_DIR) -name "*.h")
+
+DEBUG_CFLAGS = -fsanitize=address -g -O0 -DDEBUG
 RELEASE_CFLAGS = -O2 -DNDEBUG -s
 
 
@@ -34,7 +36,8 @@ release: CFLAGS += $(RELEASE_CFLAGS)
 release: $(TARGET)
 
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEAD_DIR)/%.h | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
+	@mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(SRC_DIR)/$(MAIN) $(OBJ)
@@ -45,3 +48,6 @@ $(OBJ_DIR):
 
 clean:
 	rm -rf $(TARGET) $(OBJ_DIR)
+
+print-%:
+	@echo '$*=$($*)'

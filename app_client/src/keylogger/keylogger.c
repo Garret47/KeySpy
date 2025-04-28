@@ -9,6 +9,7 @@
 #include "utils/helpers.h"
 #include "keylogger/buffer.h"
 #include "keylogger/utils/keyboard.h"
+#include "keylogger/utils/window_x11.h"
 #include "keylogger/keylogger.h"
 #include "core_state.h"
 

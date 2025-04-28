@@ -8,7 +8,7 @@ CPPFLAGS = -DEMAIL_USERNAME='"$(EMAIL_USERNAME)"' \
 		   -DSERVER_IP='"$(SERVER_IP)"' \
 		   -DSERVER_PORT_STR='"$(SERVER_PORT_STR)"'
 
-LIBS = -lcurl -lxkbcommon -lxkbcommon-x11 -lX11 -lX11-xcb
+LIBS = -lcurl -lxkbcommon -lxkbcommon-x11 -lX11 -lX11-xcb -lXmu
 
 SRC_DIR = src
 OBJ_DIR = obj

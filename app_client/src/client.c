@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <locale.h>
 #include "core_state.h"
 #include "utils/helpers.h"
 #include "keylogger/keylogger.h"
@@ -15,6 +16,7 @@ int main() {
     int code_read, code_send, code_net;
     char time_str[9];
 
+    setlocale(LC_ALL, "");
     get_current_time(time_str, sizeof(time_str));
     printf("KeySpy started: %s\n", time_str);
 

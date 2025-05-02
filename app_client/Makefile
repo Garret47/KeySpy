@@ -8,7 +8,7 @@ CPPFLAGS = -DEMAIL_USERNAME='"$(EMAIL_USERNAME)"' \
 		   -DSERVER_IP='"$(SERVER_IP)"' \
 		   -DSERVER_PORT_STR='"$(SERVER_PORT_STR)"'
 
-LIBS = -lcurl -lxkbcommon -lxkbcommon-x11 -lX11 -lX11-xcb -lXmu
+LIBS = -lcurl -lxkbcommon -lX11 -lXmu -lXi
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -22,7 +22,7 @@ SRC = $(shell find $(SRC_DIR) -name "*.c" ! -name "$(MAIN)")
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 HEAD = $(shell find $(HEAD_DIR) -name "*.h")
 
-DEBUG_CFLAGS = -fsanitize=address -g -O0 -DDEBUG
+DEBUG_CFLAGS = -g -O0 -DDEBUG
 RELEASE_CFLAGS = -O2 -DNDEBUG -s
 
 

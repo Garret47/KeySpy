@@ -3,7 +3,7 @@
 #include <string.h>
 #include <locale.h>
 #include <unistd.h>
-#include <X11/Xmu/WinUtil.h>
+#include "keylogger/utils/active_window.h"
 
 static int x_error = 0;
 

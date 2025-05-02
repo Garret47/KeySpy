@@ -1,5 +1,4 @@
-#ifndef CoreSignal_H_SENTRY
-#define CoreSignal_H_SENTRY
+#pragma once
 
 #include <stdatomic.h>
 #include <signal.h>
@@ -10,5 +9,3 @@ extern int pipe_fd_network[2];
 
 void signal_handler(int sig);
 int init_state();
-
-#endif

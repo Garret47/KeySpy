@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "utils/helpers.h"
+#include "utils/time_utils.h"
 
 
 void get_current_time(char *buffer, size_t buffer_size) {

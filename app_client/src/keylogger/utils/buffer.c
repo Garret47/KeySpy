@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
-#include "keylogger/buffer.h"
+#include "keylogger/utils/buffer.h"
 
 
 int buffer_text_init(BufferText *buffer) {
@@ -16,7 +16,7 @@ int buffer_text_init(BufferText *buffer) {
     return 0;
 }
 
-int buffer_text_add(BufferText *buffer, const char *str, pthread_mutex_t *mutex, FileHandler *fh){
+static int buffer_text_add(BufferText *buffer, const char *str, pthread_mutex_t *mutex, Logfile *fh){
     int len = strlen(str);
     if (len >= BUFFER_CAPACITY){
         fprintf(stderr,
@@ -27,7 +27,7 @@ int buffer_text_add(BufferText *buffer, const char *str, pthread_mutex_t *mutex,
     }
     if (buffer->size + len >= BUFFER_CAPACITY){
         pthread_mutex_lock(mutex);
-        FileHandler_write(fh, buffer->data);
+        Logfile_write(fh, buffer->data);
         pthread_mutex_unlock(mutex);
         buffer->size = 0;
         buffer->data[0] = '\0';
@@ -48,17 +48,17 @@ void buffer_text_clear(BufferText *buffer){
     }
 }
 
-int write_or_buffer_event(FileHandler *file, BufferText *buffer, const char *event_str, pthread_mutex_t *mutex){
+int write_or_buffer_event(Logfile *fh, BufferText *buffer, const char *event_str, pthread_mutex_t *mutex){
     if (pthread_mutex_trylock(mutex) == 0) {
         if (buffer->size){
-            FileHandler_write(file, buffer->data);
+            Logfile_write(fh, buffer->data);
             buffer->size = 0;
         }
-        FileHandler_write(file, event_str);
+        Logfile_write(fh, event_str);
         pthread_mutex_unlock(mutex);
         return 0;
     }
-    if (buffer_text_add(buffer, event_str, mutex, file)){
+    if (buffer_text_add(buffer, event_str, mutex, fh)){
         return 1;
     }
     return 0;

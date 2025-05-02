@@ -6,7 +6,7 @@
 You'll need to install several development libraries. Below is an example for Ubuntu:
 ```bash
 sudo apt update
-sudo apt install libcurl4-openssl-dev libxkbcommon-dev libxkbcommon-x11-dev libx11-dev libx11-xcb-dev gcc make python3 python3-venv
+sudo apt install libcurl4-openssl-dev libxkbcommon-dev libx11-dev libxmu-dev libxi-dev gcc make python3 python3-venv python3-tk
 ```
 
 *For other systems, you'll need equivalent packages for libcurl, libxkbcommon (with X11 support), libX11, and standard build tools.*
@@ -15,7 +15,7 @@ sudo apt install libcurl4-openssl-dev libxkbcommon-dev libxkbcommon-x11-dev libx
 ### Install Python dependencies
 Navigate to the app_server directory and install the required Python dependencies using pip:
 ```bash
-python -m venv venv
+python3 -m venv venv
 source ./venv/bin/activate
 cd app_server
 pip install -r requirements.txt

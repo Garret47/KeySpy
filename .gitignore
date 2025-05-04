@@ -18,6 +18,7 @@ app_server/.env
 app_server/key_spy.conf
 app_server/test.py
 app_server/ui_settings.py
+app_server/screenshots/
 
 #Client
 app_client/obj/

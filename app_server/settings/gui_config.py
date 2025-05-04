@@ -26,6 +26,9 @@ class WidgetNames:
     SERVER_IP_ENTRY: str = 'server_ip_entry'
     SERVER_PORT_ENTRY: str = 'server_port_entry'
     DURATION_SPINBOX: str = 'duration_spinbox'
+    SCREEN_FRAME_IMG: str = 'screenshot_frame_image'
+    LABEL_SCREEN: str = 'label_screenshot'
+    BUTTON_SAVE_SCREEN: str = 'btn_save_screenshot'
 
     def __post_init__(self):
         self.BUTTONS_HEADER_CLIENT: list = [self.BUTTON_SCREEN, self.BUTTON_WEB, self.BUTTON_DESTRUCT, self.BUTTON_FILE]
@@ -44,6 +47,7 @@ class CallbackNames:
     CLICK_TABLE: str = 'click_table'
     CLICK_COMPILE: str = "compile_btn"
     CLICK_CLOSE_TOPLEVEL: str = "close_toplevel"
+    CLICK_SAVE_SCREEN: str = 'save_screenshot'
 
 
 @dataclass

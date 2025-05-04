@@ -23,7 +23,8 @@
     config:
         relief: flat
     map:
-        background: [["active", "#1C2029"]]
+        background: [["active", "#1C2029"], ["disabled", "#252525"]]
+        foreground: [["disabled", "#383838"]]
         shiftrelief: [["pressed", 2]]
 
 -   name: TLabelframe

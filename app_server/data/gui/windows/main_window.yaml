@@ -4,8 +4,8 @@ themes: !include ../custom_themes.yaml
 styles: !include ../styles.yaml
 func: [10, !method "!var callback_names.CLICK_REFRESH"]
 extra:
-    size: [ 800, 600 ]
-    minsize: [ 800, 600 ]
+    size: [ 1024, 800 ]
+    minsize: [ 1024, 800 ]
 grid_config:
     rows: 2
     columns: 1

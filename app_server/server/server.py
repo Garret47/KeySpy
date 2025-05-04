@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class Server(metaclass=MetaSingleton):
     TIMEOUT: float = 2.5
-    BUFFER: int = 1024
+    BUFFER: int = 4096
     DEFAULT_HOSTNAME = 'Unknown'
 
     def __init__(self, host: str, port: int):
@@ -51,11 +51,13 @@ class Server(metaclass=MetaSingleton):
                     break
                 response += answer
             except TimeoutError:
-                logger.debug(f'Execution timeout -> get {response}')
+                logger.debug(f'Execution timeout {addr}')
                 break
         if response:
             return response
-        await self.disconnect_client(addr)
+        if reader.at_eof():
+            logger.info(f'Client {addr} closed connection')
+            await self.disconnect_client(addr)
 
     async def send_command(self, addr: tuple, command: Command):
         _, writer = self.clients[addr]
@@ -64,7 +66,7 @@ class Server(metaclass=MetaSingleton):
                 logger.info(f'Client {addr} connection is closing, cannot send command')
                 await self.disconnect_client(addr)
                 return
-            writer.write(command.COMMAND.encode() + b'\n')
+            writer.write(command.COMMAND.encode())
             await writer.drain()
         except (ConnectionResetError, BrokenPipeError) as e:
             logger.error(f'Connection close {addr}: {e}')

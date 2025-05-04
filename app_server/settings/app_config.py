@@ -21,9 +21,13 @@ class CompileConfig:
 @dataclass
 class AppConfig:
     FILE_LOGGING_CONFIG: Path = Path('data/logging.yaml')
+    SCREENSHOT_DIR: Path = Path('screenshots')
     CLIENT_DIR: Path = Path('../app_client/')
     gui: GUI = field(default_factory=GUI)
     compile: CompileConfig = field(default_factory=CompileConfig)
+
+    def __post_init__(self):
+        self.SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 app_config = AppConfig()

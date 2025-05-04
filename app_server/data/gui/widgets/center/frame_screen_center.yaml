@@ -7,16 +7,47 @@ grid:
     columnspan: 1
     sticky: NSEW
 grid_config:
-    rows: 1
+    rows: 2
     columns: 1
-    r_weights: [1]
+    r_weights: [10, 1]
     c_weights: [1]
 children:
-    -   type: Label
-        name: screenshot_label
-        extra:
-            text: "Screenshot"
-            style: Compile.TLabel
+    -   type: Frame
+        name: !var widget_names.SCREEN_FRAME_IMG
+        grid_config:
+            rows: 1
+            columns: 1
+            r_weights: [ 1 ]
+            c_weights: [ 1 ]
         grid:
             row: 0
             column: 0
+            rowspan: 1
+            columnspan: 1
+            sticky: NSEW
+        children:
+            -   type: Label
+                name: !var widget_names.LABEL_SCREEN
+                extra:
+                    text: "Screenshot"
+                    style: Compile.TLabel
+                grid:
+                    row: 0
+                    column: 0
+                    columnspan: 1
+                    rowspan: 1
+    -   type: Button
+        name: !var widget_names.BUTTON_SAVE_SCREEN
+        extra:
+            text: "Save Screen"
+            takefocus: False
+            bootstyle: TButton
+            state: disabled
+            command: !method "!var callback_names.CLICK_SAVE_SCREEN"
+        grid:
+            row: 1
+            column: 0
+            columnspan: 1
+            rowspan: 1
+            sticky: s
+            pady: [0, 10]

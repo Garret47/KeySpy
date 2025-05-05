@@ -16,5 +16,5 @@ class TableviewSchema(ComponentSchema):
 
 
 class InputSchema(ComponentSchema):
-    type: Literal["Entry", "Spinbox"]
+    type: Literal["Entry", "Spinbox", "Text"]
     insert: Optional[List[Union[int, str]]] = None

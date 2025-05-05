@@ -8,9 +8,9 @@ grid:
     sticky: NSEW
 grid_config:
     rows: 2
-    columns: 1
+    columns: 2
     r_weights: [10, 1]
-    c_weights: [1]
+    c_weights: [1, 1]
 children:
     -   type: Frame
         name: !var widget_names.SCREEN_FRAME_IMG
@@ -23,7 +23,7 @@ children:
             row: 0
             column: 0
             rowspan: 1
-            columnspan: 1
+            columnspan: 2
             sticky: NSEW
         children:
             -   type: Label
@@ -37,6 +37,21 @@ children:
                     columnspan: 1
                     rowspan: 1
     -   type: Button
+        name: !var widget_names.BUTTON_CREATE_SCREEN
+        extra:
+            text: "Create Screenshot"
+            takefocus: False
+            bootstyle: TButton
+            command: !method "!var callback_names.CLICK_CREATE_SCREEN"
+        grid:
+            row: 1
+            column: 0
+            columnspan: 1
+            rowspan: 1
+            sticky: s
+            pady: [ 0, 10 ]
+            padx: 5
+    -   type: Button
         name: !var widget_names.BUTTON_SAVE_SCREEN
         extra:
             text: "Save Screen"
@@ -46,8 +61,9 @@ children:
             command: !method "!var callback_names.CLICK_SAVE_SCREEN"
         grid:
             row: 1
-            column: 0
+            column: 1
             columnspan: 1
             rowspan: 1
             sticky: s
             pady: [0, 10]
+            padx: 5

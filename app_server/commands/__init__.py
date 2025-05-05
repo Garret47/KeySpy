@@ -1,3 +1,3 @@
 from .base import Command
-from .monitoring import ScreenshotCommand, WebcamCommand, FileCommand
+from .monitoring import *
 from .system import SelfDestructCommand

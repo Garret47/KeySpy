@@ -1,0 +1,166 @@
+type: Frame
+name: info_frame
+grid:
+    row: 1
+    column: 0
+    rowspan: 2
+    columnspan: 1
+    sticky: NSEW
+grid_config:
+    rows: 1
+    columns: 2
+    r_weights: [1]
+    c_weights: [1, 7]
+children:
+    -   type: Frame
+        name: info_frame_command
+        grid_config:
+            rows: 7
+            columns: 1
+            r_weights: [ 1, 1, 1, 1, 1, 1, 1 ]
+            c_weights: [ 1 ]
+        grid:
+            row: 0
+            column: 0
+            rowspan: 1
+            columnspan: 1
+            sticky: NEW
+        children:
+            -   type: Button
+                name: !var widget_names.BUTTON_INFO_CPU
+                extra:
+                    text: "CPU Load"
+                    takefocus: False
+                    bootstyle: TButton
+                    command: !method "!var callback_names.CLICK_INFO_CPU"
+                grid:
+                    row: 0
+                    column: 0
+                    columnspan: 1
+                    rowspan: 1
+                    sticky: new
+                    padx: 10
+                    pady: 5
+            -   type: Button
+                name: !var widget_names.BUTTON_INFO_MEMORY
+                extra:
+                    text: "Memory Usage"
+                    takefocus: False
+                    bootstyle: TButton
+                    command: !method "!var callback_names.CLICK_INFO_MEMORY"
+                grid:
+                    row: 1
+                    column: 0
+                    columnspan: 1
+                    rowspan: 1
+                    sticky: new
+                    padx: 10
+                    pady: 5
+            -   type: Button
+                name: !var widget_names.BUTTON_INFO_PROCESS
+                extra:
+                    text: "Process Information"
+                    takefocus: False
+                    bootstyle: TButton
+                    command: !method "!var callback_names.CLICK_INFO_PROCESS"
+                grid:
+                    row: 2
+                    column: 0
+                    columnspan: 1
+                    rowspan: 1
+                    sticky: new
+                    padx: 10
+                    pady: 5
+            -   type: Button
+                name: !var widget_names.BUTTON_INFO_DISK
+                extra:
+                    text: "Disk Usage"
+                    takefocus: False
+                    bootstyle: TButton
+                    command: !method "!var callback_names.CLICK_INFO_DISK"
+                grid:
+                    row: 3
+                    column: 0
+                    columnspan: 1
+                    rowspan: 1
+                    sticky: new
+                    padx: 10
+                    pady: 5
+            -   type: Button
+                name: !var widget_names.BUTTON_INFO_NETWORK
+                extra:
+                    text: "Network Activity"
+                    takefocus: False
+                    bootstyle: TButton
+                    command: !method "!var callback_names.CLICK_INFO_NETWORK"
+                grid:
+                    row: 4
+                    column: 0
+                    columnspan: 1
+                    rowspan: 1
+                    sticky: new
+                    padx: 10
+                    pady: 5
+            -   type: Button
+                name: !var widget_names.BUTTON_INFO_UPTIME
+                extra:
+                    text: "System Uptime"
+                    takefocus: False
+                    bootstyle: TButton
+                    command: !method "!var callback_names.CLICK_INFO_UPTIME"
+                grid:
+                    row: 5
+                    column: 0
+                    columnspan: 1
+                    rowspan: 1
+                    sticky: new
+                    padx: 10
+                    pady: 5
+            -   type: Button
+                name: !var widget_names.BUTTON_INFO_SYSINFO
+                extra:
+                    text: "System Information"
+                    takefocus: False
+                    bootstyle: TButton
+                    command: !method "!var callback_names.CLICK_INFO_SYSINFO"
+                grid:
+                    row: 6
+                    column: 0
+                    columnspan: 1
+                    rowspan: 1
+                    sticky: new
+                    padx: 10
+                    pady: 5
+
+    -   type: LabelFrame
+        name: info_frame_result
+        extra:
+            text: Information
+        grid_config:
+            rows: 1
+            columns: 1
+            r_weights: [ 1 ]
+            c_weights: [ 1 ]
+        grid:
+            row: 0
+            column: 1
+            rowspan: 1
+            columnspan: 1
+            sticky: NSEW
+            pady: [0, 10]
+        children:
+            -   type: Text
+                name: !var widget_names.INFO_TEXT
+                extra:
+                    wrap: word
+                    state: disabled
+                    width: 100
+                    font: ["DejaVu Sans Mono", 10]
+                grid:
+                    row: 0
+                    column: 0
+                    rowspan: 1
+                    columnspan: 1
+                    sticky: NSEW
+                    pady: 10
+                    padx: 10

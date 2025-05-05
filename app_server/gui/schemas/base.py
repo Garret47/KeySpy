@@ -14,7 +14,8 @@ SUPPORTED_CLASSES = {
     "Toplevel": ttk.Toplevel,
     "LabelFrame": ttk.LabelFrame,
     "Entry": ttk.Entry,
-    "Spinbox": ttk.Spinbox
+    "Spinbox": ttk.Spinbox,
+    "Text": ttk.Text
 }
 
 

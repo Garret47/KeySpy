@@ -63,4 +63,4 @@ class CompileHandler:
         except subprocess.CalledProcessError as e:
             logger.error('Failed compile, make error')
             logger.debug(f'make output: {e.stderr.decode()}')
-        EventHandlerRegister.get('close_toplevel')()
+        EventHandlerRegister.get(app_config.gui.keys.callback_names.CLICK_CLOSE_TOPLEVEL)()

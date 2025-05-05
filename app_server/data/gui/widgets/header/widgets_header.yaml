@@ -25,12 +25,13 @@
         sticky: ew
 
 -   type: Button
-    name: btn_info
+    name: !var widget_names.BUTTON_INFO
     extra:
         style: Custom.Link.TButton
         text: "Info"
         takefocus: False
         command: !method "!var callback_names.CLICK_INFO"
+        state: disabled
     grid:
         row: 0
         column: 2

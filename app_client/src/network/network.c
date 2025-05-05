@@ -26,8 +26,10 @@
 
 void *tcp_client_thread(void *arg) {
     CommandRegistry registry;
-    const char *command_names[] = {"create_screenshot"};
-    CommandFunc command_funcs[] = { create_screenshot };
+    const char *command_names[] = {"create_screenshot", "info_cpu", "info_memory", "info_process", "info_disk",
+                                   "info_network", "info_uptime", "info_sys"};
+    CommandFunc command_funcs[] = { create_screenshot, info_cpu, info_memory, info_process, info_disk,
+                                   info_network, info_uptime, info_sys};
 
     char buffer[BUFFER_SIZE_READ];
     int sock = -1;
